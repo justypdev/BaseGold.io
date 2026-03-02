@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Security Headers (CSP) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://mainnet.base.org https://base.llamarpc.com https://base-mainnet.public.blastapi.io https://base.publicnode.com https://1rpc.io https://api.dexscreener.com https://api.coingecko.com https://api.geckoterminal.com https://*.basegold.io; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    
+    <title>Buy BaseGold (BG) — Find the Best Price</title>
+    <meta name="description" content="Find the best price for BaseGold (BG) across multiple decentralized exchanges. Compare prices, liquidity, and slippage in real-time.">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://basegold.io/buy">
+    <meta property="og:title" content="Buy BaseGold (BG) — Find the Best Price">
+    <meta property="og:description" content="Find the best price for BaseGold across multiple DEXes. Compare prices, liquidity, and slippage in real-time.">
+    <meta property="og:image" content="https://basegold.io/og-image.png">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@BaseGold_BG">
+    <meta name="twitter:title" content="Buy BaseGold (BG) — Find the Best Price">
+    <meta name="twitter:description" content="Find the best price for BaseGold across multiple DEXes. Compare prices, liquidity, and slippage in real-time.">
+    <meta name="twitter:image" content="https://basegold.io/og-image.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F4E4BA;
+            --gold-dark: #996515;
+            --black: #0A0A0A;
+            --dark: #111111;
+            --darker: #0D0D0D;
+            --gray: #888888;
+            --white: #FFFFFF;
+            --green: #22c55e;
+            --blue: #3b82f6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: var(--black);
+            color: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Gold shimmer animation */
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .gold-text {
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light), var(--gold), var(--gold-dark));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+
+        /* Ambient glow */
+        .ambient-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(212, 175, 55, 0.05) 0%, transparent 50%);
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            background: rgba(10, 10, 10, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .logo img {
+            width: 40px;
+            height: 40px;
+        }
+
+        .logo-text {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--gold);
+            letter-spacing: 0.1em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .nav-links a.active {
+            color: var(--gold);
+        }
+
+        /* Main Content */
+        main {
+            position: relative;
+            z-index: 1;
+            padding-top: 100px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* DEX Aggregator Card */
+        .dex-card {
+            background: linear-gradient(145deg, rgba(17, 17, 17, 0.9), rgba(10, 10, 10, 0.95));
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 20px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .dex-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .dex-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            color: var(--gold);
+        }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--green);
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--gray);
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(212, 175, 55, 0.2);
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        /* DEX List */
+        .dex-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .dex-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--white);
+            transition: all 0.3s ease;
+        }
+
+        .dex-item:hover {
+            transform: translateX(4px);
+            border-color: rgba(212, 175, 55, 0.3);
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .dex-item.best {
+            border-color: var(--green);
+            background: linear-gradient(90deg, rgba(34, 197, 94, 0.1), transparent);
+            box-shadow: 0 0 20px rgba(34, 197, 94, 0.1);
+        }
+
+        .dex-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .dex-icon {
+            font-size: 2rem;
+            width: 50px;
+            text-align: center;
+        }
+
+        .dex-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .badge {
+            font-size: 0.65rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-best {
+            background: var(--green);
+            color: white;
+        }
+
+        .badge-verified {
+            background: rgba(59, 130, 246, 0.2);
+            color: var(--blue);
+        }
+
+        .dex-meta {
+            font-size: 0.85rem;
+            color: var(--gray);
+            margin-top: 0.25rem;
+        }
+
+        .dex-price {
+            text-align: right;
+        }
+
+        .price-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--gold-light);
+        }
+
+        .price-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+        }
+
+        /* Contract Address */
+        .contract-box {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .contract-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.75rem;
+        }
+
+        .contract-address {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .contract-address code {
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            color: var(--green);
+            word-break: break-all;
+        }
+
+        .copy-btn {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--gold);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .copy-btn:hover {
+            background: rgba(212, 175, 55, 0.2);
+        }
+
+        .contract-links {
+            margin-top: 1rem;
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .contract-links a {
+            color: var(--gold);
+            font-size: 0.85rem;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .contract-links a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: rgba(212, 175, 55, 0.05);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .info-box h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+
+        .info-box ul {
+            list-style: none;
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .info-box li {
+            padding: 0.5rem 0;
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        .info-box li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: var(--gold);
+        }
+
+        /* Footer note */
+        .footer-note {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.8rem;
+            margin-top: 2rem;
+            padding-bottom: 2rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .page-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .dex-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .dex-price {
+                text-align: left;
+            }
+
+            .container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-glow"></div>
+
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <img src="logo.png" alt="BaseGold">
+                <span class="logo-text">BASEGOLD</span>
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="games.html">Games</a>
+                <a href="team.html">Council</a>
+                <a href="governance.html">Governance</a>
+                <a href="buy.html" class="active">Buy BG</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="container">
+            <div class="page-header">
+                <h1><span class="gold-text">💰 Buy BaseGold</span></h1>
+                <p>Compare prices across decentralized exchanges to find the best deal. Prices update automatically every 30 seconds.</p>
+            </div>
+
+            <div class="dex-card">
+                <div class="dex-header">
+                    <div class="dex-title">🔍 DEX Price Comparison</div>
+                    <div class="live-badge">
+                        <span class="live-dot"></span>
+                        <span>Live prices</span>
+                    </div>
+                </div>
+
+                <div id="dex-list" class="dex-list">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Finding best prices...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="contract-box">
+                <div class="contract-label">BaseGold Contract Address (CA)</div>
+                <div class="contract-address">
+                    <code id="contract-address">0x36b712A629095234F2196BbB000D1b96C12Ce78e</code>
+                    <button class="copy-btn" onclick="copyContract()">📋 Copy</button>
+                </div>
+                <div class="contract-links">
+                    <a href="https://basescan.org/token/0x36b712A629095234F2196BbB000D1b96C12Ce78e" target="_blank" rel="noopener">View on BaseScan →</a>
+                    <a href="https://dexscreener.com/base/0x36b712A629095234F2196BbB000D1b96C12Ce78e" target="_blank" rel="noopener">View on DexScreener →</a>
+                </div>
+            </div>
+
+            <div class="info-box">
+                <h3>🛡️ How to Buy Safely</h3>
+                <ul>
+                    <li>Always verify the contract address before swapping</li>
+                    <li>Look for the ✓ badge indicating verified/audited DEXes</li>
+                    <li>Higher liquidity = lower slippage on your trade</li>
+                    <li>Compare prices - sometimes smaller DEXes have better rates</li>
+                    <li>Set appropriate slippage tolerance (1-3% recommended)</li>
+                </ul>
+            </div>
+
+            <p class="footer-note">
+                Prices are fetched from DexScreener API. Always DYOR before trading.<br>
+                BaseGold is not responsible for losses due to trading decisions.
+            </p>
+        </div>
+    </main>
+
+    <script>
+        // Trusted DEXes - well-established, audited, safe
+        const TRUSTED_DEXES = ['uniswap', 'aerodrome', 'sushiswap', 'pancakeswap', 'mineswap'];
+        
+        // DEXes to exclude
+        const EXCLUDED_DEXES = ['baseswap'];
+
+        // Factory address → name mapping (for DEXes DexScreener doesn't recognize yet)
+        const FACTORY_NAME_MAP = {
+            '0xb0c2d8a877a5b48607d9c89b6ad761f36bc79c88': 'mineswap',
+        };
+
+        // DEX URLs
+        const DEX_URLS = {
+            'uniswap': 'https://app.uniswap.org/swap?chain=base&outputCurrency=0x36b712A629095234F2196BbB000D1b96C12Ce78e',
+            'aerodrome': 'https://aerodrome.finance/swap?to=0x36b712a629095234f2196bbb000d1b96c12ce78e&from=eth&chain0=8453&chain1=8453',
+            'sushiswap': 'https://www.sushi.com/base/swap?token1=0x36b712A629095234F2196BbB000D1b96C12Ce78e',
+            'pancakeswap': 'https://pancakeswap.finance/swap?outputCurrency=0x36b712A629095234F2196BbB000D1b96C12Ce78e&chainId=1&chain=base',
+            'swapbased': 'https://swapbased.finance/#/swap?outputCurrency=0x36b712A629095234F2196BbB000D1b96C12Ce78e',
+            'alienbase': 'https://app.alienbase.xyz/swap?outputCurrency=0x36b712A629095234F2196BbB000D1b96C12Ce78e',
+            'dackieswap': 'https://www.dackieswap.xyz/swap?outputCurrency=0x36b712A629095234F2196BbB000D1b96C12Ce78e&chain=base',
+            'mineswap': 'https://mineswap.app',
+        };
+
+        // DEX Logos
+        const DEX_LOGOS = {
+            'uniswap': '🦄',
+            'aerodrome': '✈️',
+            'sushiswap': '🍣',
+            'pancakeswap': '🥞',
+            'swapbased': '💫',
+            'alienbase': '👽',
+            'dackieswap': '🦆',
+            'balancer': '⚖️',
+            'curve': '🌀',
+            'mineswap': '⛏️',
+        };
+
+        // Display name overrides
+        const DEX_DISPLAY_NAMES = {
+            'mineswap': 'MineSwap',
+        };
+
+        async function fetchPrices() {
+            const container = document.getElementById('dex-list');
+            
+            try {
+                const res = await fetch('https://api.dexscreener.com/latest/dex/tokens/0x36b712A629095234F2196BbB000D1b96C12Ce78e');
+                const data = await res.json();
+
+                if (!data.pairs || data.pairs.length === 0) {
+                    container.innerHTML = `
+                        <div class="loading">
+                            <p>No pairs found. Try again later.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Filter and process pairs
+                let dexPrices = data.pairs
+                    .filter(pair => {
+                        if (pair.chainId !== 'base') return false;
+                        if (EXCLUDED_DEXES.includes(pair.dexId?.toLowerCase())) return false;
+                        if ((parseFloat(pair.liquidity?.usd) || 0) < 100) return false;
+                        return true;
+                    })
+                    .map(pair => {
+                        let dexId = pair.dexId?.toLowerCase() || 'unknown';
+                        // Check if this is a known factory under a different name
+                        const factoryOverride = FACTORY_NAME_MAP[dexId];
+                        if (factoryOverride) dexId = factoryOverride;
+                        const displayName = DEX_DISPLAY_NAMES[dexId] || (dexId.charAt(0).toUpperCase() + dexId.slice(1));
+                        
+                        // Determine BG price based on whether BG is base or quote token
+                        const bgAddress = '0x36b712A629095234F2196BbB000D1b96C12Ce78e'.toLowerCase();
+                        const isBaseToken = pair.baseToken?.address?.toLowerCase() === bgAddress;
+                        let bgPrice;
+                        if (isBaseToken) {
+                            // BG is base token — priceUsd IS the BG price
+                            bgPrice = parseFloat(pair.priceUsd) || 0;
+                        } else {
+                            // BG is quote token — priceUsd is the OTHER token's price
+                            // BG price = otherTokenPriceUsd / priceNative
+                            const otherPrice = parseFloat(pair.priceUsd) || 0;
+                            const priceNative = parseFloat(pair.priceNative) || 0;
+                            bgPrice = (priceNative > 0) ? otherPrice / priceNative : 0;
+                        }
+
+                        return {
+                            name: displayName,
+                            dexId: dexId,
+                            pair: (pair.baseToken?.symbol || 'BG') + '/' + (pair.quoteToken?.symbol || 'WETH'),
+                            logo: DEX_LOGOS[dexId] || '🔄',
+                            price: bgPrice,
+                            liquidity: parseFloat(pair.liquidity?.usd) || 0,
+                            url: DEX_URLS[dexId] || `https://dexscreener.com/base/${pair.pairAddress}`,
+                            trusted: TRUSTED_DEXES.includes(dexId),
+                            pairAddress: pair.pairAddress
+                        };
+                    })
+                    .sort((a, b) => {
+                        // Sort by price ascending (cheapest first)
+                        if (a.price > 0 && b.price > 0) return a.price - b.price;
+                        if (a.price > 0) return -1;
+                        if (b.price > 0) return 1;
+                        return 0;
+                    });
+
+                // Find best price among trusted DEXes
+                let bestIdx = 0;
+                let bestPrice = Infinity;
+                dexPrices.forEach((dex, i) => {
+                    if (dex.price > 0 && dex.price < bestPrice && dex.trusted) {
+                        bestPrice = dex.price;
+                        bestIdx = i;
+                    }
+                });
+
+                // Render
+                container.innerHTML = dexPrices.map((dex, i) => `
+                    <a href="${dex.url}" target="_blank" rel="noopener" class="dex-item ${i === bestIdx ? 'best' : ''}">
+                        <div class="dex-info">
+                            <div class="dex-icon">${dex.logo}</div>
+                            <div>
+                                <div class="dex-name">
+                                    ${dex.name}
+                                    ${dex.trusted ? '<span class="badge badge-verified">✓ Verified</span>' : ''}
+                                    ${i === bestIdx ? '<span class="badge badge-best">Best Price</span>' : ''}
+                                </div>
+                                <div class="dex-meta">
+                                    <span style="color: #D4AF37; font-weight: 500;">${dex.pair}</span> · $${formatNumber(dex.liquidity)} liquidity
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dex-price">
+                            <div class="price-value">$${dex.price.toFixed(4)}</div>
+                            <div class="price-label">per BG</div>
+                        </div>
+                    </a>
+                `).join('');
+
+            } catch (err) {
+                console.error('Error fetching prices:', err);
+                container.innerHTML = `
+                    <div class="loading">
+                        <p>Error loading prices. Please try again.</p>
+                    </div>
+                `;
+            }
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toFixed(0);
+        }
+
+        function copyContract() {
+            const address = '0x36b712A629095234F2196BbB000D1b96C12Ce78e';
+            navigator.clipboard.writeText(address).then(() => {
+                const btn = document.querySelector('.copy-btn');
+                const original = btn.textContent;
+                btn.textContent = '✓ Copied!';
+                setTimeout(() => btn.textContent = original, 2000);
+            });
+        }
+
+        // Initial fetch
+        fetchPrices();
+
+        // Refresh every 30 seconds
+        setInterval(fetchPrices, 30000);
+    </script>
+</body>
+</html>

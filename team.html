@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Security Headers (CSP) - Mitigates XSS and data injection attacks -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://mainnet.base.org https://base.llamarpc.com https://api.coingecko.com https://*.basegold.io; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    
+    <title>BaseGold Team - The Golden Council</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F4E4BA;
+            --gold-dark: #996515;
+            --black: #0A0A0A;
+            --dark: #111111;
+            --darker: #0D0D0D;
+            --gray: #888888;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: var(--black);
+            color: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Global Gold Particles */
+        .global-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .global-particle {
+            position: absolute;
+            background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            animation: globalFloat linear infinite;
+        }
+
+        @keyframes globalFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(0deg);
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) rotate(720deg);
+            }
+        }
+
+        .ambient-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55, 0.02) 0%, transparent 70%);
+        }
+
+        /* Gold shimmer animation */
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes drip {
+            0% { transform: translateY(-10px); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(30px); opacity: 0; }
+        }
+
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 20px rgba(212, 175, 55, 0.3); }
+            50% { box-shadow: 0 0 40px rgba(212, 175, 55, 0.6), 0 0 60px rgba(212, 175, 55, 0.3); }
+        }
+
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes rotateIn {
+            from {
+                opacity: 0;
+                transform: rotateY(90deg);
+            }
+            to {
+                opacity: 1;
+                transform: rotateY(0);
+            }
+        }
+
+        .gold-text {
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light), var(--gold), var(--gold-dark));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+
+        /* Team Section */
+        .team-section {
+            padding: 8rem 5%;
+            position: relative;
+            background: var(--darker);
+            overflow: hidden;
+        }
+
+        .team-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55, 0.03) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        /* Floating gold particles */
+        .team-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .team-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: float 8s ease-in-out infinite;
+            opacity: 0.3;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 1.5rem;
+            opacity: 0.8;
+        }
+
+        .section-header h2 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.8;
+        }
+
+        /* Team Grid */
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 1.5rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Team Card */
+        .team-card {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeInUp 0.8s ease-out backwards;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .team-card:nth-child(1) { animation-delay: 0.05s; }
+        .team-card:nth-child(2) { animation-delay: 0.1s; }
+        .team-card:nth-child(3) { animation-delay: 0.15s; }
+        .team-card:nth-child(4) { animation-delay: 0.2s; }
+        .team-card:nth-child(5) { animation-delay: 0.25s; }
+        .team-card:nth-child(6) { animation-delay: 0.3s; }
+        .team-card:nth-child(7) { animation-delay: 0.35s; }
+        .team-card:nth-child(8) { animation-delay: 0.4s; }
+        .team-card:nth-child(9) { animation-delay: 0.45s; }
+        .team-card:nth-child(10) { animation-delay: 0.5s; }
+        .team-card:nth-child(11) { animation-delay: 0.55s; }
+        .team-card:nth-child(12) { animation-delay: 0.6s; }
+        .team-card:nth-child(13) { animation-delay: 0.65s; }
+
+        .team-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: var(--gold);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.5),
+                0 0 30px rgba(212, 175, 55, 0.2),
+                inset 0 0 30px rgba(212, 175, 55, 0.05);
+        }
+
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(212, 175, 55, 0.2),
+                transparent
+            );
+            transition: left 0.5s ease;
+            z-index: 2;
+        }
+
+        .team-card:hover::before {
+            left: 100%;
+        }
+
+        /* Gold drip effect */
+        .team-card::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            width: 3px;
+            height: 20px;
+            background: linear-gradient(to bottom, transparent, var(--gold));
+            border-radius: 50%;
+            opacity: 0;
+            transform: translateX(-50%);
+            transition: opacity 0.3s ease;
+        }
+
+        .team-card:hover::after {
+            animation: drip 1s ease-in-out infinite;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease, filter 0.5s ease;
+        }
+
+        .team-card:hover .card-image {
+            transform: scale(1.1);
+        }
+
+        /* Card overlay with name */
+        .card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 2rem 1rem 1rem;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.7), transparent);
+            transform: translateY(30%);
+            transition: transform 0.4s ease;
+        }
+
+        .team-card:hover .card-overlay {
+            transform: translateY(0);
+        }
+
+        .member-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 0.25rem;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .member-role {
+            font-size: 0.7rem;
+            color: var(--gray);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.4s ease 0.1s;
+        }
+
+        .team-card:hover .member-role {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Special styling for Golden Goat (founder) */
+        .team-card.founder {
+            grid-column: span 1;
+            border: 2px solid var(--gold);
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        .team-card.founder .member-name {
+            font-size: 1.1rem;
+        }
+
+        .team-card.founder::after {
+            animation: drip 1s ease-in-out infinite;
+            opacity: 1;
+        }
+
+        /* Sparkle effects */
+        .sparkle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            background: var(--gold-light);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 3;
+        }
+
+        .team-card .sparkle:nth-child(1) {
+            top: 10%;
+            right: 10%;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        .team-card .sparkle:nth-child(2) {
+            top: 30%;
+            left: 5%;
+            animation: sparkle 2s ease-in-out infinite 0.5s;
+        }
+
+        .team-card .sparkle:nth-child(3) {
+            bottom: 40%;
+            right: 15%;
+            animation: sparkle 2s ease-in-out infinite 1s;
+        }
+
+        /* Team stats */
+        .team-stats {
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+        }
+
+        .team-stat {
+            text-align: center;
+        }
+
+        .team-stat-value {
+            font-family: 'Cinzel', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .team-stat-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+        }
+
+        /* CTA */
+        .team-cta {
+            text-align: center;
+            margin-top: 4rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .team-cta p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+
+        .join-btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            color: var(--black);
+            padding: 1rem 3rem;
+            border: none;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .join-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.4);
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .home-btn {
+            display: inline-block;
+            background: transparent;
+            color: var(--gold);
+            padding: 1rem 3rem;
+            border: 1px solid var(--gold);
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .home-btn:hover {
+            background: var(--gold);
+            color: var(--black);
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.3);
+        }
+
+        .stats-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--gold);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+            animation: glow 3s ease-in-out infinite;
+        }
+
+        .logo-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .team-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 1rem;
+            }
+
+            .team-stats {
+                gap: 2rem;
+            }
+
+            .team-stat-value {
+                font-size: 2rem;
+            }
+
+            .member-name {
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .team-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Global Gold Particles -->
+    <div class="ambient-glow"></div>
+    <div class="global-particles" id="global-particles"></div>
+
+    <!-- TEAM SECTION - Copy everything inside this section to your index.html -->
+    <section class="team-section" id="team">
+        <!-- Floating particles -->
+        <div class="team-particles">
+            <div class="team-particle" style="top: 10%; left: 5%;"></div>
+            <div class="team-particle" style="top: 20%; left: 85%; animation-delay: 1s;"></div>
+            <div class="team-particle" style="top: 40%; left: 15%; animation-delay: 2s;"></div>
+            <div class="team-particle" style="top: 60%; left: 90%; animation-delay: 3s;"></div>
+            <div class="team-particle" style="top: 80%; left: 25%; animation-delay: 4s;"></div>
+            <div class="team-particle" style="top: 30%; left: 70%; animation-delay: 1.5s;"></div>
+            <div class="team-particle" style="top: 70%; left: 60%; animation-delay: 2.5s;"></div>
+        </div>
+
+        <div class="section-header">
+            <div class="section-badge">Backed by Real People</div>
+            <h2><span class="gold-text">THE GOLDEN COUNCIL</span></h2>
+            <p>48+ dedicated members building the future of deflationary digital gold. Real holders. Real believers. No rugs, just trust.</p>
+        </div>
+
+        <div class="team-grid">
+            <!-- Golden Goat - Founder -->
+            <div class="team-card founder">
+                <span class="sparkle"></span>
+                <span class="sparkle"></span>
+                <span class="sparkle"></span>
+                <img src="images/team/golden-goat.jpg" alt="Golden Goat" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Goat</div>
+                    <div class="member-role">🐐 The OG</div>
+                </div>
+            </div>
+
+            <!-- Skyler -->
+            <div class="team-card">
+                <img src="images/team/skyler.jpg" alt="Golden Skyler" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Skyler</div>
+                    <div class="member-role">Turtleneck Drip</div>
+                </div>
+            </div>
+
+            <!-- Justin -->
+            <div class="team-card">
+                <img src="images/team/justin.jpg" alt="Golden Justin" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Justin</div>
+                    <div class="member-role">Trader Flex 📈</div>
+                </div>
+            </div>
+
+            <!-- Kyle -->
+            <div class="team-card">
+                <img src="images/team/kyle.jpg" alt="Golden Kyle" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Kyle</div>
+                    <div class="member-role">Gold Suit King</div>
+                </div>
+            </div>
+
+            <!-- Nick -->
+            <div class="team-card">
+                <img src="images/team/nick.jpg" alt="Golden Nick" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Nick</div>
+                    <div class="member-role">Crypto Dad 🪙</div>
+                </div>
+            </div>
+
+            <!-- AJ -->
+            <div class="team-card">
+                <img src="images/team/aj.jpg" alt="Golden AJ" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden AJ</div>
+                    <div class="member-role">Mysterious Boss 😎</div>
+                </div>
+            </div>
+
+            <!-- Kat -->
+            <div class="team-card">
+                <img src="images/team/kat.jpg" alt="Golden Kat" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Kat</div>
+                    <div class="member-role">Dart Queen 🎯</div>
+                </div>
+            </div>
+
+            <!-- Quaylyn -->
+            <div class="team-card">
+                <img src="images/team/quaylyn.jpg" alt="Golden Quaylyn" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Quaylyn</div>
+                    <div class="member-role">Dreads Legend</div>
+                </div>
+            </div>
+
+            <!-- Tim -->
+            <div class="team-card">
+                <img src="images/team/tim.jpg" alt="Golden Tim" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Tim</div>
+                    <div class="member-role">Tatted Tank 💪</div>
+                </div>
+            </div>
+
+            <!-- Oliver -->
+            <div class="team-card">
+                <img src="images/team/oliver.jpg" alt="Golden Oliver" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Oliver</div>
+                    <div class="member-role">Dome King 🏆</div>
+                </div>
+            </div>
+
+            <!-- Rogue -->
+            <div class="team-card">
+                <img src="images/team/rogue.jpg" alt="Golden Rogue" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Rogue</div>
+                    <div class="member-role">Anime Warrior ⚔️</div>
+                </div>
+            </div>
+
+            <!-- Mike -->
+            <div class="team-card">
+                <img src="images/team/mike.jpg" alt="Golden Mike" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Mike</div>
+                    <div class="member-role">Explorer 🏔️</div>
+                </div>
+            </div>
+
+            <!-- Jordan -->
+            <div class="team-card">
+                <img src="images/team/jordan.jpg" alt="Golden Jordan" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Jordan</div>
+                    <div class="member-role">Golden Goddess 👑</div>
+                </div>
+            </div>
+
+            <!-- Kaye -->
+            <div class="team-card">
+                <img src="images/team/kaye.jpg" alt="Golden Kaye" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Kaye</div>
+                    <div class="member-role">Boss Lady 💼</div>
+                </div>
+            </div>
+
+            <!-- Ken -->
+            <div class="team-card">
+                <img src="images/team/ken.jpg" alt="Golden Ken" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Ken</div>
+                    <div class="member-role">Rock Legend 🤘</div>
+                </div>
+            </div>
+
+            <!-- VJ -->
+            <div class="team-card">
+                <img src="images/team/vj.jpg" alt="Golden VJ" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden VJ</div>
+                    <div class="member-role">Sunshine ☀️</div>
+                </div>
+            </div>
+
+            <!-- Miggy -->
+            <div class="team-card">
+                <img src="images/team/miggy.jpg" alt="Golden Miggy" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Miggy</div>
+                    <div class="member-role">Donut King 🍩</div>
+                </div>
+            </div>
+
+            <!-- James -->
+            <div class="team-card">
+                <img src="images/team/james.jpg" alt="Golden James" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden James</div>
+                    <div class="member-role">Visionary 🎨</div>
+                </div>
+            </div>
+
+            <!-- Ron -->
+            <div class="team-card">
+                <img src="images/team/ron.jpg" alt="Golden Ron" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Ron</div>
+                    <div class="member-role">Chain Gang ⛓️</div>
+                </div>
+            </div>
+
+            <!-- Brett -->
+            <div class="team-card">
+                <img src="images/team/brett.jpg" alt="Golden Brett" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Brett</div>
+                    <div class="member-role">Golden Smirk 😏</div>
+                </div>
+            </div>
+
+            <!-- Nomad -->
+            <div class="team-card">
+                <img src="images/team/nomad.jpg" alt="Golden Nomad" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Nomad</div>
+                    <div class="member-role">Luxury Life 🚗</div>
+                </div>
+            </div>
+
+            <!-- Parker -->
+            <div class="team-card">
+                <img src="images/team/parker.jpg" alt="Golden Parker" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Parker</div>
+                    <div class="member-role">Party Rapper 🎤</div>
+                </div>
+            </div>
+
+            <!-- Dr. Norvel -->
+            <div class="team-card">
+                <img src="images/team/norvel.jpg" alt="Golden Dr. Norvel" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Dr. Norvel</div>
+                    <div class="member-role">Wise OG 👨‍⚕️</div>
+                </div>
+            </div>
+
+            <!-- Eric -->
+            <div class="team-card">
+                <img src="images/team/eric.jpg" alt="Golden Eric" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Eric</div>
+                    <div class="member-role">Aviator Cool 🕶️</div>
+                </div>
+            </div>
+
+            <!-- JayAnon -->
+            <div class="team-card">
+                <img src="images/team/jayanon.jpg" alt="Golden JayAnon" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden JayAnon</div>
+                    <div class="member-role">Bucket Hat Vibes 🎣</div>
+                </div>
+            </div>
+
+            <!-- Juice -->
+            <div class="team-card">
+                <img src="images/team/juice.jpg" alt="Golden Juice" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Juice</div>
+                    <div class="member-role">Young Drip 🧃</div>
+                </div>
+            </div>
+
+            <!-- Bobby -->
+            <div class="team-card">
+                <img src="images/team/bobby.jpg" alt="Golden Bobby" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Bobby</div>
+                    <div class="member-role">Gelato King 🍦</div>
+                </div>
+            </div>
+
+            <!-- Matt -->
+            <div class="team-card">
+                <img src="images/team/matt.jpg" alt="Golden Matt" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Matt</div>
+                    <div class="member-role">Golden Santa 🎅</div>
+                </div>
+            </div>
+
+            <!-- Thomas -->
+            <div class="team-card">
+                <img src="images/team/thomas.jpg" alt="Golden Thomas" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Thomas</div>
+                    <div class="member-role">Golden Hunter 🦌</div>
+                </div>
+            </div>
+
+            <!-- Farhad -->
+            <div class="team-card">
+                <img src="images/team/farhad.jpg" alt="Golden Farhad" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Farhad</div>
+                    <div class="member-role">Golden Boss 👑</div>
+                </div>
+            </div>
+
+            <!-- Voltage -->
+            <div class="team-card">
+                <img src="images/team/voltage.jpg" alt="Golden Voltage" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Voltage</div>
+                    <div class="member-role">Meme Lord ⚡🐸</div>
+                </div>
+            </div>
+
+            <!-- Duncan -->
+            <div class="team-card">
+                <img src="images/team/duncan.jpg" alt="Golden Duncan" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Duncan</div>
+                    <div class="member-role">Conference King 👓</div>
+                </div>
+            </div>
+
+            <!-- Curran -->
+            <div class="team-card">
+                <img src="images/team/curran.jpg" alt="Golden Curran" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Curran</div>
+                    <div class="member-role">Rap Visionary 🎤</div>
+                </div>
+            </div>
+
+            <!-- Mike G -->
+            <div class="team-card">
+                <img src="images/team/mikeg.jpg" alt="Golden Mike G" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Mike G</div>
+                    <div class="member-role">Golden Mogul 🎩💎</div>
+                </div>
+            </div>
+
+            <!-- Jamar -->
+            <div class="team-card">
+                <img src="images/team/jamar.jpg" alt="Golden Jamar" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Jamar</div>
+                    <div class="member-role">Crypto OG 👑</div>
+                </div>
+            </div>
+
+            <!-- G -->
+            <div class="team-card">
+                <img src="images/team/g.jpg" alt="Golden G" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden G</div>
+                    <div class="member-role">Elder Sage 🧔</div>
+                </div>
+            </div>
+
+            <!-- AB -->
+            <div class="team-card">
+                <img src="images/team/ab.jpg" alt="Golden AB" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden AB</div>
+                    <div class="member-role">The Showman 🏈</div>
+                </div>
+            </div>
+
+            <!-- Yun Gin -->
+            <div class="team-card">
+                <img src="images/team/yungin.jpg" alt="Golden Yun Gin" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Yun Gin</div>
+                    <div class="member-role">Money Flex 💵</div>
+                </div>
+            </div>
+
+            <!-- Shogun -->
+            <div class="team-card">
+                <img src="images/team/shogun.jpg" alt="Golden Shogun" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Shogun</div>
+                    <div class="member-role">Cyber Warrior 💻</div>
+                </div>
+            </div>
+
+            <!-- Stew -->
+            <div class="team-card">
+                <img src="images/team/stew.jpg" alt="Golden Stew" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Stew</div>
+                    <div class="member-role">BJJ Champion 🥋</div>
+                </div>
+            </div>
+
+            <!-- Charles D -->
+            <div class="team-card">
+                <img src="images/team/charlesd.jpg" alt="Golden Charles D" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Charles D</div>
+                    <div class="member-role">Good Vibes 🐧</div>
+                </div>
+            </div>
+
+            <!-- Elnen -->
+            <div class="team-card">
+                <img src="images/team/elnen.jpg" alt="Golden Elnen" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Elnen</div>
+                    <div class="member-role">Golden Warrior ⚔️</div>
+                </div>
+            </div>
+
+            <!-- OneEyeWillie -->
+            <div class="team-card">
+                <img src="images/team/oneeyewillie.jpg" alt="Golden OneEyeWillie" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden OneEyeWillie</div>
+                    <div class="member-role">Pirate Captain 🏴‍☠️</div>
+                </div>
+            </div>
+
+            <!-- Church Mouse -->
+            <div class="team-card">
+                <img src="images/team/churchmouse.jpg" alt="Golden Church Mouse" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Church Mouse</div>
+                    <div class="member-role">Zen Fighter 🥊</div>
+                </div>
+            </div>
+
+            <!-- Theodoros -->
+            <div class="team-card">
+                <img src="images/team/theodoros.jpg" alt="Golden Theodoros" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Theodoros</div>
+                    <div class="member-role">Boxing Champ 🥊</div>
+                </div>
+            </div>
+
+            <!-- Flash -->
+            <div class="team-card">
+                <img src="images/team/flash.jpg" alt="Golden Flash" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Flash</div>
+                    <div class="member-role">Lightning Fox ⚡</div>
+                </div>
+            </div>
+
+            <!-- Debro -->
+            <div class="team-card">
+                <img src="images/team/debro.jpg" alt="Golden Debro" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Debro</div>
+                    <div class="member-role">The Schemer 😏</div>
+                </div>
+            </div>
+
+            <!-- Doji -->
+            <div class="team-card">
+                <img src="images/team/doji.jpg" alt="Golden Doji" class="card-image" loading="lazy">
+                <div class="card-overlay">
+                    <div class="member-name">Golden Doji</div>
+                    <div class="member-role">Pixel Llama 🦙</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Team Stats -->
+        <div class="team-stats">
+            <div class="team-stat">
+                <div class="team-stat-value">48+</div>
+                <div class="team-stat-label">Council Members</div>
+            </div>
+            <div class="team-stat logo-stat">
+                <img src="logov2.jpg" alt="BaseGold Logo" class="stats-logo">
+                <div class="team-stat-label">BaseGold</div>
+            </div>
+            <div class="team-stat">
+                <div class="team-stat-value">100%</div>
+                <div class="team-stat-label">Diamond Hands</div>
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="team-cta">
+            <p>Want to join the Golden Council?</p>
+            <div class="cta-buttons">
+                <a href="https://t.me/+CD3uVgD0EJZhODhh" target="_blank" class="join-btn">Join Our Telegram</a>
+                <a href="index.html" class="home-btn">← Back to Home</a>
+            </div>
+        </div>
+    </section>
+    <!-- END TEAM SECTION -->
+
+    <script>
+        // Generate Global Gold Particles
+        function createGlobalParticles() {
+            const container = document.getElementById('global-particles');
+            const particleCount = window.innerWidth < 768 ? 15 : 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'global-particle';
+                
+                const size = Math.random() * 4 + 2;
+                const left = Math.random() * 100;
+                const duration = Math.random() * 20 + 15;
+                const delay = Math.random() * 20;
+                
+                particle.style.cssText = `
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${left}%;
+                    animation-duration: ${duration}s;
+                    animation-delay: ${delay}s;
+                `;
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        createGlobalParticles();
+    </script>
+
+</body>
+</html>

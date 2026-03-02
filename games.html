@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Security Headers (CSP) -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://mainnet.base.org https://base.llamarpc.com https://api.coingecko.com https://*.basegold.io; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    
+    <title>The Mine — Trustless Web3 Gaming Protocol | BaseGold</title>
+    <meta name="description" content="The Mine: A trustless smart contract gaming protocol on Base. Play-to-earn with on-chain verification, anti-cheat protection, and deflationary tokenomics.">
+    
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://basegold.io/games">
+    <meta property="og:title" content="The Mine — Trustless Web3 Gaming Protocol">
+    <meta property="og:description" content="Play-to-earn gaming powered by verifiable smart contracts on Base. Fair, transparent, deflationary.">
+    <meta property="og:image" content="https://basegold.io/og-image.png">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@BaseGold_BG">
+    <meta name="twitter:title" content="The Mine — Trustless Web3 Gaming Protocol">
+    <meta name="twitter:description" content="Play-to-earn gaming powered by verifiable smart contracts on Base.">
+    
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F4E4BA;
+            --gold-dark: #996515;
+            --black: #0A0A0A;
+            --darker: #050505;
+            --gray: #888888;
+            --white: #FFFFFF;
+            --red: #ff6b6b;
+            --green: #4ade80;
+            --blue: #3b82f6;
+            --purple: #a855f7;
+            --orange: #f97316;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: var(--black);
+            color: var(--white);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Particles */
+        .particles {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float linear infinite;
+        }
+
+        @keyframes float {
+            0% { opacity: 0; transform: translateY(100vh) rotate(0deg); }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { opacity: 0; transform: translateY(-100px) rotate(720deg); }
+        }
+
+        .ambient-glow {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(212, 175, 55, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(212, 175, 55, 0.05) 0%, transparent 50%);
+        }
+
+        /* Header */
+        .header {
+            position: relative;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+        }
+
+        .logo img { height: 40px; width: 40px; }
+
+        .logo-text {
+            font-family: 'Cinzel', serif;
+            font-size: 1.25rem;
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s, text-shadow 0.3s;
+        }
+
+        .nav-link:hover { 
+            color: var(--gold-light);
+            text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 4rem 5% 3rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1.25rem;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.1));
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-title {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero-title .gold {
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light), var(--gold), var(--gold-dark));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 2rem;
+            line-height: 1.7;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .hero-stat {
+            text-align: center;
+        }
+
+        .hero-stat-value {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: var(--gold);
+        }
+
+        .hero-stat-label {
+            font-size: 0.8rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        /* Enter The Mine CTA Button */
+        .enter-mine-btn {
+            display: inline-block;
+            margin-top: 2rem;
+            padding: 1rem 3rem;
+            font-size: 1.3rem;
+            font-weight: bold;
+            font-family: 'Cinzel', serif;
+            color: #000;
+            background: linear-gradient(135deg, #D4AF37, #FDE047, #D4AF37);
+            background-size: 200% 200%;
+            border: none;
+            border-radius: 12px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
+            animation: goldShimmer 3s ease-in-out infinite;
+        }
+
+        .enter-mine-btn:hover {
+            transform: scale(1.05) translateY(-2px);
+            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.6);
+        }
+
+        @keyframes goldShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Protocol Features */
+        .protocol-section {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+        }
+
+        .section-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            color: var(--gold);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--gray);
+            margin-bottom: 3rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .feature-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            background: linear-gradient(135deg, rgba(20, 20, 25, 0.9), rgba(10, 10, 15, 0.95));
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: transform 0.3s, border-color 0.3s;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(212, 175, 55, 0.5);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.25rem;
+            color: var(--gold);
+            margin-bottom: 0.75rem;
+        }
+
+        .feature-desc {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Apps Section */
+        .apps-section {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 5% 4rem;
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .apps-grid { grid-template-columns: 1fr; }
+        }
+
+        .app-card {
+            display: block;
+            text-decoration: none;
+            background: linear-gradient(135deg, rgba(20, 20, 25, 0.95), rgba(10, 10, 15, 0.98));
+            border-radius: 24px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .app-card:hover { transform: translateY(-8px); }
+
+        .app-card.mine {
+            border: 2px solid rgba(74, 222, 128, 0.4);
+        }
+        .app-card.mine:hover {
+            box-shadow: 0 25px 80px rgba(74, 222, 128, 0.25);
+        }
+
+        .app-card.vein {
+            border: 2px solid rgba(234, 179, 8, 0.4);
+        }
+        .app-card.vein:hover {
+            box-shadow: 0 25px 80px rgba(234, 179, 8, 0.25);
+        }
+
+        .app-header {
+            padding: 2rem 2rem 1.5rem;
+            text-align: center;
+        }
+
+        .app-header.mine {
+            background: linear-gradient(135deg, rgba(74, 222, 128, 0.15), transparent);
+        }
+        .app-header.vein {
+            background: linear-gradient(135deg, rgba(234, 179, 8, 0.15), transparent);
+        }
+
+        .app-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .app-badge.live {
+            background: rgba(74, 222, 128, 0.2);
+            border: 1px solid rgba(74, 222, 128, 0.5);
+            color: var(--green);
+        }
+
+        .app-badge.passive {
+            background: rgba(234, 179, 8, 0.2);
+            border: 1px solid rgba(234, 179, 8, 0.5);
+            color: var(--gold);
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: blink 1s infinite;
+        }
+
+        .badge-dot.green { background: var(--green); }
+        .badge-dot.gold { background: var(--gold); }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        .app-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .app-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .app-title.mine { color: var(--green); }
+        .app-title.vein { color: var(--gold); }
+
+        .app-tagline {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        .app-body {
+            padding: 0 2rem 2rem;
+        }
+
+        .app-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .app-stat {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+        }
+
+        .app-stat-value {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .app-stat-value.green { color: var(--green); }
+        .app-stat-value.gold { color: var(--gold); }
+
+        .app-stat-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-top: 0.25rem;
+        }
+
+        .app-features {
+            margin-bottom: 1.5rem;
+        }
+
+        .app-feature {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            font-size: 0.9rem;
+        }
+
+        .app-feature:last-child { border-bottom: none; }
+
+        .app-feature strong { color: var(--gold); }
+
+        .app-cta {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            border-radius: 12px;
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: center;
+            text-decoration: none;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .app-cta.mine {
+            background: linear-gradient(135deg, var(--green), #22c55e);
+            color: var(--black);
+        }
+
+        .app-cta.vein {
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            color: var(--black);
+        }
+
+        .app-cta:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Smart Contracts Section */
+        .contracts-section {
+            position: relative;
+            z-index: 10;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+        }
+
+        .contracts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .contract-card {
+            background: linear-gradient(135deg, rgba(15, 15, 20, 0.95), rgba(5, 5, 10, 0.98));
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 16px;
+            padding: 1.5rem;
+        }
+
+        .contract-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .contract-icon {
+            font-size: 2rem;
+        }
+
+        .contract-name {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--gold);
+        }
+
+        .contract-desc {
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .contract-address {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 0.7rem;
+            color: var(--green);
+            word-break: break-all;
+        }
+
+        .contract-link {
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 0.8rem;
+            margin-top: 0.75rem;
+            display: inline-block;
+        }
+
+        .contract-link:hover { text-decoration: underline; }
+
+        /* NFT Marketplace Section */
+        .nft-section {
+            position: relative;
+            z-index: 10;
+            padding: 4rem 5%;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .nft-box {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(168, 85, 247, 0.1));
+            border: 1px solid rgba(59, 130, 246, 0.3);
+            border-radius: 20px;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .nft-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(168, 85, 247, 0.3));
+            border: 1px solid rgba(59, 130, 246, 0.5);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #60a5fa;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .nft-title {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .nft-title .gold {
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nft-subtitle {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            line-height: 1.6;
+        }
+
+        .nft-features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .nft-feature {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .nft-feature-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .nft-feature-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .nft-feature-text strong {
+            color: var(--white);
+            font-size: 0.95rem;
+        }
+
+        .nft-feature-text span {
+            color: var(--gray);
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .nft-stats-transfer {
+            background: rgba(212, 175, 55, 0.1);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .nft-transfer-title {
+            font-weight: 600;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        .nft-transfer-items {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.75rem;
+        }
+
+        .transfer-item {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            color: var(--gold-light);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .nft-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .nft-cta:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Tokenomics Section */
+        .tokenomics-section {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 3rem 5%;
+        }
+
+        .tokenomics-box {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
+            border: 2px solid rgba(212, 175, 55, 0.4);
+            border-radius: 24px;
+            padding: 3rem;
+            text-align: center;
+        }
+
+        .tokenomics-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.75rem;
+            color: var(--gold);
+            margin-bottom: 2rem;
+        }
+
+        .burn-stats {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .burn-stat {
+            text-align: center;
+        }
+
+        .burn-stat-value {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--red);
+        }
+
+        .burn-stat-label {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .burn-points {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            text-align: left;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .burn-point {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--white);
+            font-size: 0.95rem;
+        }
+
+        .burn-point-icon {
+            color: var(--green);
+            font-size: 1.25rem;
+        }
+
+        /* Footer */
+        .footer {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 3rem 5%;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-link {
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .footer-link:hover { color: var(--gold-light); }
+
+        .footer-copy {
+            color: var(--gray);
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero-stats { gap: 1.5rem; }
+            .hero-stat-value { font-size: 1.5rem; }
+            .burn-stats { gap: 1.5rem; }
+            .burn-stat-value { font-size: 2rem; }
+            .nav-links { gap: 1rem; }
+            .nav-link { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles" id="particles"></div>
+    <div class="ambient-glow"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <a href="index.html" class="logo">
+            <img src="logo.png" alt="BaseGold">
+            <span class="logo-text">BaseGold</span>
+        </a>
+        <nav class="nav-links">
+            <a href="index.html" class="nav-link">Home</a>
+            <a href="games.html" class="nav-link">Protocol</a>
+            <a href="buy.html" class="nav-link">DEX Finder</a>
+            <a href="governance.html" class="nav-link">Governance</a>
+            <a href="team.html" class="nav-link">Team</a>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-badge">
+            ⛓️ Powered by Base Network
+        </div>
+        <h1 class="hero-title">
+            <span class="gold">The Mine</span> Protocol
+        </h1>
+        <p class="hero-subtitle">
+            Trustless smart contracts powering the next generation of Web3 gaming. 
+            Fair play, verifiable rewards, and deflationary tokenomics — all on-chain.
+        </p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <div class="hero-stat-value">100%</div>
+                <div class="hero-stat-label">On-Chain Verified</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">5 CPS</div>
+                <div class="hero-stat-label">Anti-Cheat Protection</div>
+            </div>
+            <div class="hero-stat">
+                <div class="hero-stat-value">0%</div>
+                <div class="hero-stat-label">Admin Keys</div>
+            </div>
+        </div>
+        
+        <!-- Enter The Mine CTA Button -->
+        <a href="https://mineswap.app/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" 
+           target="_blank" 
+           class="enter-mine-btn">
+            ⛏️ Enter The Mine
+        </a>
+    </section>
+
+    <!-- Protocol Features -->
+    <section class="protocol-section">
+        <h2 class="section-title">🏗️ Protocol Architecture</h2>
+        <p class="section-subtitle">Built for transparency, security, and fairness</p>
+        
+        <div class="features-grid">
+            <a href="https://mineswap.app/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="feature-card">
+                <div class="feature-icon">🔐</div>
+                <h3 class="feature-title">Trustless Smart Contracts</h3>
+                <p class="feature-desc">
+                    All game purchases and rewards are processed through verified smart contracts. 
+                    No admin keys, no backdoors — just immutable code.
+                </p>
+            </a>
+            
+            <a href="https://mineswap.app/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="feature-card">
+                <div class="feature-icon">🛡️</div>
+                <h3 class="feature-title">Server-Side Anti-Cheat</h3>
+                <p class="feature-desc">
+                    Human-rate CPS limits (5-10 CPS), click validation, and gold rate verification 
+                    make botting unprofitable while keeping gameplay smooth.
+                </p>
+            </a>
+            
+            <a href="https://mineswap.app/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="feature-card">
+                <div class="feature-icon">🔥</div>
+                <h3 class="feature-title">Deflationary Burns</h3>
+                <p class="feature-desc">
+                    100% of shop purchases are burned permanently. Every game played 
+                    reduces the total supply, increasing scarcity over time.
+                </p>
+            </a>
+            
+            <a href="https://mineswap.app/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="feature-card">
+                <div class="feature-icon">✍️</div>
+                <h3 class="feature-title">Wallet Signature Auth</h3>
+                <p class="feature-desc">
+                    Leaderboard submissions require cryptographic wallet signatures, 
+                    supporting both EOA and Smart Wallets (ERC-1271).
+                </p>
+            </a>
+            
+            <a href="https://mineswap.app/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="feature-card">
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title">Real-Time Price Feeds</h3>
+                <p class="feature-desc">
+                    Live DEX aggregation from 7+ exchanges with 30-second refresh rates. 
+                    Always get the best price data on-screen.
+                </p>
+            </a>
+            
+            <a href="https://mineswap.app/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="feature-card">
+                <div class="feature-icon">🎮</div>
+                <h3 class="feature-title">Progressive Game Design</h3>
+                <p class="feature-desc">
+                    Combo systems, crit multipliers, passive income, and premium upgrades 
+                    create engaging gameplay with real token utility.
+                </p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Apps Section -->
+    <section class="apps-section">
+        <h2 class="section-title">🎮 Protocol Applications</h2>
+        <p class="section-subtitle">Two ways to engage with BaseGold</p>
+        
+        <div class="apps-grid">
+            <!-- The Mine -->
+            <a href="https://mineswap.app/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" class="app-card mine" target="_blank">
+                <div class="app-header mine">
+                    <div class="app-badge live">
+                        <span class="badge-dot green"></span>
+                        Season 2 Live
+                    </div>
+                    <div class="app-icon">⛏️</div>
+                    <h2 class="app-title mine">The Mine</h2>
+                    <p class="app-tagline">Competitive Play-to-Earn Mining</p>
+                </div>
+                
+                <div class="app-body">
+                    <div class="app-stats">
+                        <div class="app-stat">
+                            <div class="app-stat-value green">10+ BG</div>
+                            <div class="app-stat-label">Prize Pool</div>
+                        </div>
+                        <div class="app-stat">
+                            <div class="app-stat-value gold">25x</div>
+                            <div class="app-stat-label">Max Combo</div>
+                        </div>
+                    </div>
+
+                    <div class="app-features">
+                        <div class="app-feature">
+                            <span>🐐</span>
+                            <span><strong>Golden Goat</strong> — Auto-click + 25x combo</span>
+                        </div>
+                        <div class="app-feature">
+                            <span>🍀</span>
+                            <span><strong>Lucky Strike</strong> — Up to 100% crit chance</span>
+                        </div>
+                        <div class="app-feature">
+                            <span>👑</span>
+                            <span><strong>Gold Crown</strong> — 2x global multiplier</span>
+                        </div>
+                        <div class="app-feature">
+                            <span>🏆</span>
+                            <span>Top player wins <strong>Golden Council seat</strong></span>
+                        </div>
+                        <div class="app-feature">
+                            <span>🔥</span>
+                            <span><strong>100% of purchases burned</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="app-cta mine">
+                        ⛏️ Enter The Mine
+                    </div>
+                </div>
+            </a>
+
+            <!-- Gold Vein -->
+            <a href="https://mineswap.app/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" class="app-card vein" target="_blank">
+                <div class="app-header vein">
+                    <div class="app-badge passive">
+                        <span class="badge-dot gold"></span>
+                        Always Active
+                    </div>
+                    <div class="app-icon">💰</div>
+                    <h2 class="app-title vein">Gold Vein</h2>
+                    <p class="app-tagline">7-Level Referral Protocol</p>
+                </div>
+                
+                <div class="app-body">
+                    <div class="app-stats">
+                        <div class="app-stat">
+                            <div class="app-stat-value gold">0.10 BG</div>
+                            <div class="app-stat-label">One-Time Activation</div>
+                        </div>
+                        <div class="app-stat">
+                            <div class="app-stat-value green">95%</div>
+                            <div class="app-stat-label">To Users</div>
+                        </div>
+                    </div>
+
+                    <div class="app-features">
+                        <div class="app-feature">
+                            <span>📊</span>
+                            <span>L1: 60% • L2: 14% • L3: 9% • L4-7: 12%</span>
+                        </div>
+                        <div class="app-feature">
+                            <span>✨</span>
+                            <span>One-time activation, <strong>lifetime earnings</strong></span>
+                        </div>
+                        <div class="app-feature">
+                            <span>🎯</span>
+                            <span>Profitable at just <strong>2 referrals</strong></span>
+                        </div>
+                        <div class="app-feature">
+                            <span>📜</span>
+                            <span>Fully on-chain, <strong>verified contract</strong></span>
+                        </div>
+                        <div class="app-feature">
+                            <span>🔥</span>
+                            <span><strong>5% of activations burned</strong></span>
+                        </div>
+                    </div>
+
+                    <div class="app-cta vein">
+                        💎 Open Gold Vein
+                    </div>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <!-- NFT Marketplace Section -->
+    <section class="nft-section">
+        <div class="nft-box">
+            <div class="nft-badge">
+                <span>🆕</span>
+                <span>NEW FEATURE</span>
+            </div>
+            <h2 class="nft-title">⛏️ Own, Upgrade & <span class="gold">Sell Your Mine</span></h2>
+            <p class="nft-subtitle">
+                Your Mine NFT holds ALL your progress. Upgrades, gold, leaderboard rank — everything transfers when sold!
+            </p>
+            
+            <div class="nft-features">
+                <div class="nft-feature">
+                    <div class="nft-feature-icon">📈</div>
+                    <div class="nft-feature-text">
+                        <strong>Build Value</strong>
+                        <span>Upgrade your mine, climb the leaderboard, increase its worth</span>
+                    </div>
+                </div>
+                <div class="nft-feature">
+                    <div class="nft-feature-icon">💰</div>
+                    <div class="nft-feature-text">
+                        <strong>Sell on OpenSea</strong>
+                        <span>List your upgraded mine — buyer gets ALL your progress</span>
+                    </div>
+                </div>
+                <div class="nft-feature">
+                    <div class="nft-feature-icon">🔍</div>
+                    <div class="nft-feature-text">
+                        <strong>Hunt for Deals</strong>
+                        <span>Find undervalued mines with great stats and claim them</span>
+                    </div>
+                </div>
+                <div class="nft-feature">
+                    <div class="nft-feature-icon">🚀</div>
+                    <div class="nft-feature-text">
+                        <strong>Start Fresh</strong>
+                        <span>Use a friend's referral code to mint your own mine</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nft-stats-transfer">
+                <div class="nft-transfer-title">📦 What Transfers With Your Mine:</div>
+                <div class="nft-transfer-items">
+                    <span class="transfer-item">⭐ Gold Mined</span>
+                    <span class="transfer-item">🔧 All Upgrades</span>
+                    <span class="transfer-item">🏆 Leaderboard Rank</span>
+                    <span class="transfer-item">💎 Referral Earnings</span>
+                    <span class="transfer-item">⚡ Gold/Second Rate</span>
+                    <span class="transfer-item">🖱️ Total Clicks</span>
+                </div>
+            </div>
+
+            <a href="https://opensea.io/collection/basegold-mine-929632222" class="nft-cta" target="_blank">
+                🌊 Browse Mines on OpenSea
+            </a>
+        </div>
+    </section>
+
+    <!-- Smart Contracts -->
+    <section class="contracts-section">
+        <h2 class="section-title">📜 Verified Smart Contracts</h2>
+        <p class="section-subtitle">Fully audited and verified on BaseScan</p>
+        
+        <div class="contracts-grid">
+            <div class="contract-card">
+                <div class="contract-header">
+                    <span class="contract-icon">🪙</span>
+                    <span class="contract-name">BaseGold Token (BG)</span>
+                </div>
+                <p class="contract-desc">
+                    ERC-20 token with 10,000 total supply. The core asset of the BaseGold ecosystem.
+                </p>
+                <div class="contract-address">
+                    0x36b712A629095234F2196BbB000D1b96C12Ce78e
+                </div>
+                <a href="https://basescan.org/token/0x36b712A629095234F2196BbB000D1b96C12Ce78e" class="contract-link" target="_blank">
+                    View on BaseScan →
+                </a>
+            </div>
+            
+            <div class="contract-card">
+                <div class="contract-header">
+                    <span class="contract-icon">🔥</span>
+                    <span class="contract-name">Instant Burn Contract</span>
+                </div>
+                <p class="contract-desc">
+                    Powers The Mine shop purchases. Accepts ETH, buys BG from DEX, burns 100% instantly.
+                </p>
+                <div class="contract-address">
+                    0x9f02B8cBc3dDA6F7F9C704f898d063677D6C7D9d
+                </div>
+                <a href="https://basescan.org/address/0x9f02B8cBc3dDA6F7F9C704f898d063677D6C7D9d" class="contract-link" target="_blank">
+                    View on BaseScan →
+                </a>
+            </div>
+            
+            <div class="contract-card">
+                <div class="contract-header">
+                    <span class="contract-icon">💎</span>
+                    <span class="contract-name">Gold Vein Contract</span>
+                </div>
+                <p class="contract-desc">
+                    7-level referral system. 95% distributed to users, 5% burned permanently.
+                </p>
+                <div class="contract-address">
+                    0x47C1a63a07F45AFd3724A417ec2934A9EF1500dF
+                </div>
+                <a href="https://basescan.org/address/0x47C1a63a07F45AFd3724A417ec2934A9EF1500dF" class="contract-link" target="_blank">
+                    View on BaseScan →
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tokenomics -->
+    <section class="tokenomics-section">
+        <div class="tokenomics-box">
+            <h2 class="tokenomics-title">🔥 Deflationary By Design</h2>
+            
+            <div class="burn-stats">
+                <div class="burn-stat">
+                    <div class="burn-stat-value">10,000</div>
+                    <div class="burn-stat-label">Total Supply</div>
+                </div>
+                <div class="burn-stat">
+                    <div class="burn-stat-value">2,100x</div>
+                    <div class="burn-stat-label">Scarcer Than BTC</div>
+                </div>
+            </div>
+            
+            <div class="burn-points">
+                <div class="burn-point">
+                    <span class="burn-point-icon">✓</span>
+                    <span>The Mine shop purchases = <strong>100% burned</strong></span>
+                </div>
+                <div class="burn-point">
+                    <span class="burn-point-icon">✓</span>
+                    <span>Gold Vein activations = <strong>5% burned</strong></span>
+                </div>
+                <div class="burn-point">
+                    <span class="burn-point-icon">✓</span>
+                    <span>Ad revenue = <strong>Converted & burned</strong></span>
+                </div>
+                <div class="burn-point">
+                    <span class="burn-point-icon">✓</span>
+                    <span>More players = <strong>More deflation</strong></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="https://t.me/BaseGoldBG" class="footer-link" target="_blank">💬 Telegram</a>
+            <a href="https://x.com/BaseGold_BG" class="footer-link" target="_blank">𝕏 Twitter</a>
+            <a href="https://basescan.org/token/0x36b712A629095234F2196BbB000D1b96C12Ce78e" class="footer-link" target="_blank">📜 Contract</a>
+            <a href="https://app.uniswap.org/swap?outputCurrency=0x36b712A629095234F2196BbB000D1b96C12Ce78e&chain=base" class="footer-link" target="_blank">🦄 Uniswap</a>
+            <a href="whitepaper.pdf" class="footer-link" target="_blank">📄 Whitepaper</a>
+        </div>
+        <p class="footer-copy">© 2026 BaseGold Protocol. The inverse of Bitcoin. Trustless gaming on Base.</p>
+    </footer>
+
+    <script>
+        // Generate particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const count = window.innerWidth < 768 ? 15 : 25;
+            
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                const size = Math.random() * 4 + 2;
+                const left = Math.random() * 100;
+                const duration = Math.random() * 20 + 15;
+                const delay = Math.random() * 20;
+                
+                particle.style.cssText = `
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${left}%;
+                    animation-duration: ${duration}s;
+                    animation-delay: ${delay}s;
+                `;
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        createParticles();
+    </script>
+</body>
+</html>
