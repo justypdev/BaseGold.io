@@ -209,53 +209,21 @@
 
         .nav-links a.nav-highlight {
             color: var(--gold);
-            background: rgba(212, 175, 55, 0.08);
-            padding: 0.45rem 0.9rem;
-            border-radius: 6px;
-            border: 1px solid rgba(212, 175, 55, 0.15);
-            transition: background 0.3s ease, border-color 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            transform: translateZ(0);
-            will-change: background;
-            isolation: isolate;
-        }
-
-        .nav-links a.nav-highlight::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
-            transition: left 0.5s ease;
-            pointer-events: none;
+            transition: opacity 0.3s ease;
         }
 
         .nav-links a.nav-highlight:hover {
-            background: rgba(212, 175, 55, 0.15);
-            border-color: rgba(212, 175, 55, 0.35);
-        }
-
-        .nav-links a.nav-highlight:hover::before {
-            left: 100%;
+            opacity: 0.7;
         }
 
         .nav-links a.nav-primary {
-            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-            color: var(--black);
+            color: var(--gold);
             font-weight: 600;
-            border: none;
-            box-shadow: 0 2px 8px rgba(212, 175, 55, 0.2);
-            transform: translateZ(0);
-            will-change: box-shadow;
-            isolation: isolate;
-            transition: box-shadow 0.3s ease;
+            transition: opacity 0.3s ease;
         }
 
         .nav-links a.nav-primary:hover {
-            box-shadow: 0 4px 16px rgba(212, 175, 55, 0.4);
+            opacity: 0.7;
         }
 
         /* MEGA GOLD MINE BUTTON */
