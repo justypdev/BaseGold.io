@@ -209,16 +209,15 @@
 
         .nav-links a.nav-highlight {
             color: var(--gold);
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.08));
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            background: rgba(212, 175, 55, 0.08);
+            padding: 0.45rem 0.9rem;
+            border-radius: 6px;
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            transition: background 0.3s ease, border-color 0.3s ease;
             position: relative;
             overflow: hidden;
             transform: translateZ(0);
-            will-change: box-shadow, background;
-            box-shadow: 0 0 0 rgba(212, 175, 55, 0);
+            will-change: background;
             isolation: isolate;
         }
 
@@ -229,15 +228,14 @@
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
             transition: left 0.5s ease;
             pointer-events: none;
         }
 
         .nav-links a.nav-highlight:hover {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.25), rgba(212, 175, 55, 0.15));
-            border-color: var(--gold);
-            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.25);
+            background: rgba(212, 175, 55, 0.15);
+            border-color: rgba(212, 175, 55, 0.35);
         }
 
         .nav-links a.nav-highlight:hover::before {
@@ -249,16 +247,15 @@
             color: var(--black);
             font-weight: 600;
             border: none;
-            box-shadow: 0 2px 10px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 2px 8px rgba(212, 175, 55, 0.2);
             transform: translateZ(0);
-            will-change: box-shadow, background;
+            will-change: box-shadow;
             isolation: isolate;
-            transition: background 0.3s ease, box-shadow 0.3s ease;
+            transition: box-shadow 0.3s ease;
         }
 
         .nav-links a.nav-primary:hover {
-            background: linear-gradient(135deg, var(--gold), var(--gold-light));
-            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.5);
+            box-shadow: 0 4px 16px rgba(212, 175, 55, 0.4);
         }
 
         /* MEGA GOLD MINE BUTTON */
@@ -577,7 +574,7 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 120px 5% 0 5%; /* Account for nav + ticker */
+            padding: 140px 5% 0 5%; /* Extra clearance for nav (70px) + ticker (~40px) */
             position: relative;
             overflow: hidden;
         }
@@ -605,13 +602,14 @@
         .hero-badge {
             display: inline-block;
             padding: 0.5rem 1.5rem;
-            border: 1px solid var(--gold);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            background: rgba(212, 175, 55, 0.06);
             color: var(--gold);
             font-size: 0.75rem;
             letter-spacing: 0.2em;
             text-transform: uppercase;
             margin-bottom: 2rem;
-            opacity: 0.8;
+            border-radius: 4px;
         }
 
         .hero h1 {
@@ -2228,7 +2226,7 @@
                     Enter Your Gold Mine
                     <span class="pickaxe">⛏️</span>
                 </a>
-                <span class="mine-btn-subtitle">🏆 Season 2 Active • Win 10+ BG! 🏆</span>
+                <span class="mine-btn-subtitle">🏆 Season 3 Active • Win 10+ BG! 🏆</span>
             </div>
 
             <div class="hero-buttons">
@@ -2565,7 +2563,7 @@
 
             <!-- Gold Mine Card -->
             <a href="https://mineswap.org/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="app-card mine-card">
-                <div class="app-badge live-badge">⛏️ Season 2 Live</div>
+                <div class="app-badge live-badge">⛏️ Season 3 Live</div>
                 <div class="app-icon">⛏️</div>
                 <h3 class="app-title">The Gold Mine</h3>
                 <p class="app-tagline">Mine, Compete & Earn NFT Plots</p>
@@ -2842,7 +2840,7 @@
                 <span>✓ Near-Zero Fees</span>
                 <span>✓ BG Rebates</span>
                 <span>✓ 7-Level Referrals</span>
-                <span>✓ Season 2 Live</span>
+                <span>✓ Season 3 Live</span>
             </div>
         </div>
     </section>
