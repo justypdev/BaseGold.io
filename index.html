@@ -2704,7 +2704,7 @@
     <section id="apr" class="scarcity">
         <div class="section-header">
             <h2 class="gold-text">Liquidity APR Dashboard</h2>
-            <p>Estimated returns for BG liquidity providers. Est. APY reflects compounded daily yields annualized.</p>
+            <p>Live pool data for BG. MineSwap pools route 0.075% of every swap into permanent BG burns — shown per-pool below.</p>
         </div>
 
         <div class="apy-dashboard">
@@ -2714,7 +2714,7 @@
                 <span class="apy-col apy-sortable apy-sort-active" data-sort="liquidity">Liquidity <span class="sort-arrow">▼</span></span>
                 <span class="apy-col apy-sortable" data-sort="volume24h">24h Vol <span class="sort-arrow"></span></span>
                 <span class="apy-col apy-sortable" data-sort="apr24h">24h APR <span class="sort-arrow"></span></span>
-                <span class="apy-col apy-sortable" data-sort="apy30d">Est. APY <span class="sort-arrow"></span></span>
+                <span class="apy-col apy-sortable" data-sort="burn24h">BG Burned <span class="sort-arrow"></span></span>
                 <span class="apy-col">Action</span>
             </div>
             <div id="apy-pools">
@@ -2722,7 +2722,7 @@
             </div>
         </div>
         
-        <p class="apy-disclaimer">* 24h APR = (24h fees × 365 ÷ liquidity). Est. APY = daily fee yield compounded annually — reflects projected LP returns if current volume continues. MineSwap LPs earn 0.15% swap fees + contribute to BG burns. Estimates do not account for impermanent loss. Not financial advice.</p>
+        <p class="apy-disclaimer">* 24h APR = (24h fees × 365 ÷ liquidity). BG Burned shows tokens permanently removed from supply via MineSwap's 0.075% auto-buy-and-burn on every swap; non-MineSwap DEXs do not burn. Liquidity and yields do not account for impermanent loss. Not financial advice.</p>
     </section>
 
     <!-- FAQ Section -->
@@ -3137,12 +3137,12 @@
                             const fees24h = volume24h * feeRate;
                             const apr24h = liquidity > 0 ? (fees24h * 365 / liquidity) * 100 : 0;
                             
-                            // Est. APY: compound the daily fee yield over 30 days, then annualize
-                            // Uses 6h volume × 4 as smoothed daily estimate to reduce single-day spikes
-                            const smoothedDailyVol = volumeH6 * 4;
-                            const dailyRate = liquidity > 0 ? (smoothedDailyVol * feeRate) / liquidity : 0;
-                            // APY = ((1 + daily_rate)^365 - 1) × 100, based on 30-day smoothed daily yield
-                            const apy30d = dailyRate > 0 ? (Math.pow(1 + dailyRate, 365) - 1) * 100 : 0;
+                            // BG Burned (24h): MineSwap's 0.075% auto-buy-and-burn from this pool's volume
+                            // Other DEXs do not burn BG — value is 0 for them, rendered as em dash
+                            const bgPriceUsd = parseFloat(p.priceUsd || 0);
+                            const burn24h = isMineSwap && bgPriceUsd > 0
+                                ? (volume24h * 0.00075) / bgPriceUsd
+                                : 0;
                             
                             return {
                                 dex: DEX_NAME_OVERRIDES[p.dexId?.toLowerCase()] || p.dexId?.charAt(0).toUpperCase() + p.dexId?.slice(1).replace('_', ' ') || 'Unknown',
@@ -3150,7 +3150,7 @@
                                 liquidity,
                                 volume24h,
                                 apr24h,
-                                apy30d,
+                                burn24h,
                                 url: p.url,
                                 isMineSwap
                             };
@@ -3228,13 +3228,15 @@
                 return;
             }
 
-            container.innerHTML = pools.map(pool => {
+            const rowsHtml = pools.map(pool => {
                 const apr24Class = pool.apr24h > 100 ? 'apy-high' : pool.apr24h > 20 ? 'apy-medium' : 'apy-low';
-                const apyClass = pool.apy30d > 100 ? 'apy-high' : pool.apy30d > 20 ? 'apy-medium' : 'apy-low';
                 const dexKey = pool.dex.toLowerCase().replace(/[\s_-]/g, '');
                 const addLink = DEX_LINKS[dexKey] || DEX_LINKS[pool.dex.toLowerCase()] || `https://dexscreener.com/base/${pool.dex.toLowerCase()}`;
                 const displayName = pool.dex.charAt(0).toUpperCase() + pool.dex.slice(1).replace('_v2', '').replace('_', ' ');
                 const mineswapBadge = pool.isMineSwap ? ' <span style="font-size:0.65rem;color:#D4AF37;vertical-align:middle;">⛏</span>' : '';
+                const burnDisplay = pool.isMineSwap
+                    ? `<span style="color: var(--gold); font-weight: 500;">${pool.burn24h.toFixed(4)} BG</span>`
+                    : '<span style="color: var(--gray); opacity: 0.4;">—</span>';
                 
                 return `
                     <div class="apy-row">
@@ -3243,11 +3245,27 @@
                         <span class="apy-col apy-value">$${formatNumber(pool.liquidity)}</span>
                         <span class="apy-col apy-value">$${formatNumber(pool.volume24h)}</span>
                         <span class="apy-col apy-percent ${apr24Class}">${pool.apr24h.toFixed(1)}%</span>
-                        <span class="apy-col apy-percent ${apyClass}">${pool.apy30d > 999999 ? '999,999%+' : pool.apy30d > 1000 ? formatNumber(pool.apy30d) + '%' : pool.apy30d.toFixed(1) + '%'}</span>
+                        <span class="apy-col apy-value">${burnDisplay}</span>
                         <span class="apy-col"><a href="${addLink}" target="_blank" class="apy-add-btn">Add LP</a></span>
                     </div>
                 `;
             }).join('');
+
+            // Aggregate total BG burned across all MineSwap pools (24h)
+            const totalBurn24h = pools.reduce((sum, p) => sum + (p.isMineSwap ? p.burn24h : 0), 0);
+            const totalBurnHtml = totalBurn24h > 0 ? `
+                <div class="apy-row" style="background: rgba(212, 175, 55, 0.04); border-top: 1px solid rgba(212, 175, 55, 0.2);">
+                    <span class="apy-col apy-dex" style="color: var(--gold-light); font-weight: 600;">Total ⛏</span>
+                    <span class="apy-col apy-value" style="color: var(--gray); font-size: 0.85rem;">MineSwap pools, 24h</span>
+                    <span class="apy-col apy-value"></span>
+                    <span class="apy-col apy-value"></span>
+                    <span class="apy-col apy-value"></span>
+                    <span class="apy-col apy-value"><span style="color: var(--gold); font-weight: 600;">${totalBurn24h.toFixed(4)} BG 🔥</span></span>
+                    <span class="apy-col"></span>
+                </div>
+            ` : '';
+
+            container.innerHTML = rowsHtml + totalBurnHtml;
         }
 
         function formatNumber(num) {
