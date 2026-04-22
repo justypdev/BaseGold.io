@@ -1,0 +1,3346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Security Headers (CSP) - Mitigates XSS and data injection attacks -->
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://mainnet.base.org https://base.llamarpc.com https://base-mainnet.public.blastapi.io https://base.publicnode.com https://1rpc.io https://api.dexscreener.com https://api.coingecko.com https://api.geckoterminal.com https://*.basegold.io; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
+    <!-- X-Frame-Options cannot be set via meta tag - requires server/hosting configuration -->
+    <!-- See vercel.json or _headers file for full header configuration -->
+    
+    <title>BaseGold (BG) — The Store of Value for MineSwap.org</title>
+    <meta name="description" content="BaseGold is a deflationary digital asset with only 10,000 tokens — 2,100x scarcer than Bitcoin. Six burn mechanisms, MineSwap DEX, NFT mine plots, and 7-level referrals. Built on Base Network.">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://basegold.io/">
+    <meta property="og:title" content="BaseGold (BG) — The Store of Value for MineSwap.org">
+    <meta property="og:description" content="Deflationary digital asset with only 10,000 tokens — 2,100x scarcer than Bitcoin. Six burn mechanisms, MineSwap DEX, NFT mine plots, and 7-level referrals on Base Network.">
+    <meta property="og:image" content="https://basegold.io/og-image.png">
+    
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@BaseGold_BG">
+    <meta name="twitter:url" content="https://basegold.io/">
+    <meta name="twitter:title" content="BaseGold (BG) — The Store of Value for MineSwap.org">
+    <meta name="twitter:description" content="Deflationary digital asset with only 10,000 tokens — 2,100x scarcer than Bitcoin. Six burn mechanisms, MineSwap DEX, NFT mine plots, and 7-level referrals on Base Network.">
+    <meta name="twitter:image" content="https://basegold.io/og-image.png">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="apple-touch-icon" href="logo.png">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Raleway:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --gold-light: #F4E4BA;
+            --gold-dark: #996515;
+            --black: #0A0A0A;
+            --dark: #111111;
+            --darker: #0D0D0D;
+            --gray: #888888;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Raleway', sans-serif;
+            background: var(--black);
+            color: var(--white);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* Gold shimmer animation */
+        @keyframes shimmer {
+            0% { background-position: -200% center; }
+            100% { background-position: 200% center; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Global Gold Particles */
+        .global-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .global-particle {
+            position: absolute;
+            background: radial-gradient(circle, var(--gold) 0%, transparent 70%);
+            border-radius: 50%;
+            opacity: 0;
+            animation: globalFloat linear infinite;
+        }
+
+        @keyframes globalFloat {
+            0% {
+                opacity: 0;
+                transform: translateY(100vh) rotate(0deg);
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-100px) rotate(720deg);
+            }
+        }
+
+        /* Subtle gold ambient glow */
+        .ambient-glow {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55, 0.02) 0%, transparent 70%);
+        }
+
+        .gold-text {
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light), var(--gold), var(--gold-dark));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 70px;
+            padding: 0 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: #0a0a0a;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .nav-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+
+        .logo {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .nav-links a.nav-highlight {
+            color: var(--gold);
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-links a.nav-highlight:hover {
+            opacity: 0.7;
+        }
+
+        .nav-links a.nav-primary {
+            color: var(--gold);
+            font-weight: 600;
+            transition: opacity 0.3s ease;
+        }
+
+        .nav-links a.nav-primary:hover {
+            opacity: 0.7;
+        }
+
+        /* MEGA GOLD MINE BUTTON */
+        .enter-mine-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            background: linear-gradient(135deg, #FFD700, #FFA500, #FFD700);
+            background-size: 200% 200%;
+            color: #000;
+            padding: 1.2rem 3rem;
+            border: 3px solid #FFD700;
+            border-radius: 50px;
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 1.4rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            text-decoration: none;
+            animation: goldPulse 2s ease-in-out infinite, goldShine 3s linear infinite;
+            box-shadow: 
+                0 0 20px rgba(255, 215, 0, 0.5),
+                0 0 40px rgba(255, 215, 0, 0.3),
+                0 0 60px rgba(255, 215, 0, 0.2),
+                inset 0 2px 10px rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .enter-mine-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.4) 50%,
+                transparent 70%
+            );
+            animation: shine 3s infinite;
+        }
+
+        .enter-mine-btn:hover {
+            transform: scale(1.08) translateY(-4px);
+            box-shadow: 
+                0 0 30px rgba(255, 215, 0, 0.7),
+                0 0 60px rgba(255, 215, 0, 0.5),
+                0 0 90px rgba(255, 215, 0, 0.3),
+                inset 0 2px 15px rgba(255, 255, 255, 0.4);
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .enter-mine-btn .pickaxe {
+            font-size: 1.6rem;
+            animation: swing 1s ease-in-out infinite;
+        }
+
+        @keyframes goldPulse {
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 0 40px rgba(255, 215, 0, 0.3); }
+            50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.7), 0 0 60px rgba(255, 215, 0, 0.5); }
+        }
+
+        @keyframes goldShine {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        @keyframes swing {
+            0%, 100% { transform: rotate(-10deg); }
+            50% { transform: rotate(10deg); }
+        }
+
+        .mine-btn-container {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .mine-btn-subtitle {
+            display: block;
+            margin-top: 0.75rem;
+            color: var(--gold);
+            font-size: 0.9rem;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @media (max-width: 768px) {
+            .enter-mine-btn {
+                padding: 1rem 2rem;
+                font-size: 1.1rem;
+            }
+            .enter-mine-btn .pickaxe {
+                font-size: 1.3rem;
+            }
+        }
+
+        .buy-btn {
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            color: var(--black);
+            padding: 0.8rem 2rem;
+            border: none;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .buy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 0.5rem;
+            z-index: 1001;
+        }
+
+        .hamburger span {
+            display: block;
+            width: 25px;
+            height: 2px;
+            background: var(--gold);
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .desktop-only {
+            display: block;
+        }
+
+        .mobile-only {
+            display: none;
+        }
+
+        /* Live Price Ticker */
+        .price-ticker {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            background: #0a0a0a;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            z-index: 998;
+            padding: 0.5rem 0;
+        }
+
+        .ticker-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .ticker-content:hover {
+            opacity: 0.8;
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .ticker-label {
+            color: var(--gray);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .ticker-value {
+            color: var(--white);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .ticker-change {
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.15rem 0.4rem;
+            border-radius: 4px;
+        }
+
+        .ticker-change.positive {
+            color: #4ade80;
+            background: rgba(74, 222, 128, 0.1);
+        }
+
+        .ticker-change.negative {
+            color: #ff6b6b;
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .ticker-divider {
+            width: 1px;
+            height: 20px;
+            background: rgba(212, 175, 55, 0.3);
+        }
+
+        /* Sticky CTA Button */
+        .sticky-cta {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            color: var(--black);
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            box-shadow: 0 10px 40px rgba(212, 175, 55, 0.4);
+            z-index: 998;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+
+        .sticky-cta.visible {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .sticky-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 50px rgba(212, 175, 55, 0.5);
+        }
+
+        .sticky-price {
+            margin-left: 0.5rem;
+            opacity: 0.8;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .price-ticker {
+                top: 60px;
+            }
+            
+            .ticker-content {
+                gap: 1rem;
+                overflow-x: auto;
+                justify-content: flex-start;
+                padding-bottom: 0.5rem;
+            }
+            
+            .ticker-item {
+                flex-shrink: 0;
+            }
+            
+            .ticker-divider {
+                display: none;
+            }
+            
+            .sticky-cta {
+                bottom: 1rem;
+                right: 1rem;
+                padding: 0.8rem 1.2rem;
+                font-size: 0.8rem;
+            }
+            
+            .sticky-price {
+                display: none;
+            }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 140px 5% 0 5%; /* Extra clearance for nav (70px) + ticker (~40px) */
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 50% 0%, rgba(212, 175, 55, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 50%, rgba(212, 175, 55, 0.08) 0%, transparent 40%),
+                radial-gradient(ellipse at 20% 80%, rgba(212, 175, 55, 0.05) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            background: rgba(212, 175, 55, 0.06);
+            color: var(--gold);
+            font-size: 0.75rem;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 2rem;
+            border-radius: 4px;
+        }
+
+        .hero h1 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+        }
+
+        .hero-tagline {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: var(--gray);
+            font-weight: 300;
+            letter-spacing: 0.15em;
+            margin-bottom: 3rem;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 4rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            color: var(--gold);
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--gray);
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            margin-top: 0.5rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .secondary-btn {
+            background: transparent;
+            color: var(--white);
+            padding: 0.8rem 2rem;
+            border: 1px solid var(--gray);
+            font-family: 'Raleway', sans-serif;
+            font-weight: 500;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .secondary-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+        }
+
+        .hero-social {
+            margin-top: 2rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .hero-social a {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 0.5rem 1rem;
+            border: 1px solid #333;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .hero-twitter:hover  { color: var(--gold); border-color: var(--gold); }
+        .hero-telegram:hover { color: #0088cc;     border-color: #0088cc; }
+        .hero-cmc:hover      { color: #3861FB;     border-color: #3861FB; }
+        .hero-gecko:hover    { color: #8BC53F;     border-color: #8BC53F; }
+        .hero-dex:hover      { color: #00D4B0;     border-color: #00D4B0; }
+        .hero-uni:hover      { color: #FF007A;     border-color: #FF007A; }
+        .hero-coinbase:hover { color: #0052FF;     border-color: #0052FF; }
+
+        /* Floating particles */
+        .particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--gold);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite, pulse 3s ease-in-out infinite;
+        }
+
+        /* Sections */
+        section {
+            padding: 8rem 5%;
+            position: relative;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+
+        .section-header h2 {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            letter-spacing: 0.15em;
+            margin-bottom: 1rem;
+        }
+
+        .section-header p {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Scarcity Section */
+        .scarcity {
+            background: var(--darker);
+        }
+
+        .comparison-table {
+            max-width: 900px;
+            margin: 0 auto;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .table-row {
+            display: grid;
+            grid-template-columns: 2fr 1.5fr 1fr;
+            padding: 1.5rem 2rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            align-items: center;
+        }
+
+        .table-row:last-child {
+            border-bottom: none;
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05));
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            color: var(--gold);
+        }
+
+        .table-row.highlight {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.05));
+        }
+
+        .table-row .asset {
+            font-weight: 500;
+        }
+
+        .table-row .supply {
+            text-align: center;
+            color: var(--gray);
+        }
+
+        .table-row .factor {
+            text-align: right;
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+        }
+
+        .table-row.highlight .factor {
+            color: var(--gold);
+            font-size: 1.5rem;
+        }
+
+        /* Bitcoin vs BaseGold Comparison */
+        .comparison-section {
+            padding: 6rem 5%;
+            background: linear-gradient(180deg, var(--black) 0%, var(--darker) 100%);
+        }
+
+        .comparison-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+        }
+
+        .comparison-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            padding: 2rem;
+            flex: 1;
+            min-width: 300px;
+            max-width: 400px;
+        }
+
+        .btc-card {
+            border-color: rgba(255, 100, 100, 0.3);
+        }
+
+        .bg-card {
+            border-color: rgba(212, 175, 55, 0.5);
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
+        }
+
+        .comparison-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .comparison-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-icon.comparison-logo {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .comparison-header h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .comparison-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .comparison-tag.outdated {
+            background: rgba(255, 100, 100, 0.2);
+            color: #ff6b6b;
+        }
+
+        .comparison-tag.modern {
+            background: rgba(212, 175, 55, 0.2);
+            color: var(--gold);
+        }
+
+        .comparison-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .comparison-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .comparison-stat:last-child {
+            border-bottom: none;
+        }
+
+        .comparison-stat .stat-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .comparison-stat .stat-value {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .comparison-stat .stat-value.negative {
+            color: #ff6b6b;
+        }
+
+        .comparison-stat .stat-value.positive {
+            color: #4ade80;
+        }
+
+        .comparison-vs {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            color: var(--gold);
+            font-weight: 700;
+        }
+
+        .comparison-footer {
+            text-align: center;
+            color: var(--gray);
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .comparison-vs {
+                width: 100%;
+                text-align: center;
+                padding: 1rem 0;
+            }
+        }
+
+        /* Features */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            padding: 3rem 2rem;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            border-color: rgba(212, 175, 55, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            color: var(--gold);
+        }
+
+        .feature-card p {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        /* DEX Section */
+        .dex-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .dex-card {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 2rem 1.5rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: var(--white);
+        }
+
+        .dex-card:hover {
+            border-color: var(--gold);
+            background: rgba(212, 175, 55, 0.05);
+            transform: translateY(-3px);
+        }
+
+        .dex-card span {
+            font-weight: 500;
+            letter-spacing: 0.05em;
+        }
+
+        .dex-card .status {
+            display: block;
+            font-size: 0.7rem;
+            color: #4CAF50;
+            margin-top: 0.5rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        /* Contract Section */
+        .contract-section {
+            background: var(--darker);
+            text-align: center;
+        }
+
+        .contract-box {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 3rem;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), transparent);
+        }
+
+        .contract-label {
+            font-size: 0.8rem;
+            color: var(--gold);
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            margin-bottom: 1rem;
+        }
+
+        .contract-address {
+            font-family: 'Courier New', monospace;
+            font-size: clamp(0.7rem, 2vw, 1.1rem);
+            color: var(--white);
+            word-break: break-all;
+            padding: 1rem;
+            background: rgba(0,0,0,0.3);
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .contract-address:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .copy-hint {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* Roadmap */
+        .roadmap {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .roadmap-item {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+
+        .roadmap-phase {
+            flex-shrink: 0;
+            width: 100px;
+            text-align: right;
+        }
+
+        .phase-label {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            color: var(--gold);
+            letter-spacing: 0.1em;
+        }
+
+        .phase-status {
+            font-size: 0.7rem;
+            color: #4CAF50;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+
+        .roadmap-content {
+            flex: 1;
+            padding-left: 2rem;
+            border-left: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .roadmap-content h4 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+        }
+
+        .roadmap-content p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            padding: 4rem 5%;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+            text-align: center;
+        }
+
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-logo-img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+        }
+
+        .footer-logo {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            letter-spacing: 0.2em;
+            margin-bottom: 0;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-links a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.85rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--gold);
+        }
+
+        .footer-disclaimer {
+            font-size: 0.75rem;
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.6;
+        }
+
+        .footer-legal {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+        }
+
+        .footer-legal a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.75rem;
+            opacity: 0.7;
+            transition: all 0.3s ease;
+        }
+
+        .footer-legal a:hover {
+            color: var(--gold);
+            opacity: 1;
+        }
+
+        .footer-copyright {
+            font-size: 0.7rem;
+            color: var(--gray);
+            opacity: 0.5;
+            margin-top: 1.5rem;
+        }
+
+        /* Play to Burn Section */
+        .play-to-burn-section {
+            padding: 4rem 2rem;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(0, 0, 0, 0.5));
+            text-align: center;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+        }
+
+        .play-to-burn-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .play-badge {
+            display: inline-block;
+            background: var(--gold);
+            color: var(--black);
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .play-to-burn-content h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .play-to-burn-content p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .play-features {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .play-feature {
+            color: var(--white);
+            font-size: 0.9rem;
+        }
+
+        .play-feature span {
+            margin-right: 0.25rem;
+        }
+
+        .play-btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .play-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Apps Section Styles */
+        .apps-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, var(--darker) 0%, var(--black) 50%, var(--darker) 100%);
+        }
+
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            max-width: 1250px;
+            margin: 0 auto;
+        }
+
+        .app-card {
+            background: linear-gradient(135deg, rgba(20, 20, 25, 0.95), rgba(10, 10, 15, 0.98));
+            border-radius: 20px;
+            padding: 2rem;
+            text-decoration: none;
+            color: var(--white);
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .app-card:hover {
+            transform: translateY(-8px);
+        }
+
+        .mine-card {
+            border: 2px solid rgba(74, 222, 128, 0.4);
+        }
+
+        .mine-card:hover {
+            box-shadow: 0 20px 60px rgba(74, 222, 128, 0.2);
+        }
+
+        .vein-card {
+            border: 2px solid rgba(234, 179, 8, 0.4);
+        }
+
+        .war-card {
+            border: 2px solid rgba(220, 38, 38, 0.4);
+        }
+
+        .war-card:hover {
+            box-shadow: 0 20px 60px rgba(220, 38, 38, 0.2);
+        }
+
+        .vein-card:hover {
+            box-shadow: 0 20px 60px rgba(234, 179, 8, 0.2);
+        }
+
+        .app-badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+        }
+
+        .live-badge {
+            background: rgba(74, 222, 128, 0.2);
+            border: 1px solid rgba(74, 222, 128, 0.5);
+            color: #4ade80;
+        }
+
+        .passive-badge {
+            background: rgba(234, 179, 8, 0.2);
+            border: 1px solid rgba(234, 179, 8, 0.5);
+            color: var(--gold);
+        }
+
+        .app-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .app-title {
+            font-family: 'Cinzel', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .mine-card .app-title {
+            color: #4ade80;
+        }
+
+        .vein-card .app-title {
+            color: var(--gold);
+        }
+
+        .app-tagline {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .app-stats {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .app-stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .stat-num {
+            font-family: 'Cinzel', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .stat-desc {
+            font-size: 0.7rem;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .app-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 1.5rem;
+            width: 100%;
+        }
+
+        .app-features li {
+            padding: 0.5rem 0;
+            font-size: 0.85rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .app-features li:last-child {
+            border-bottom: none;
+        }
+
+        .app-features strong {
+            color: var(--gold);
+        }
+
+        .app-cta {
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            transition: all 0.3s ease;
+        }
+
+        .mine-cta {
+            background: linear-gradient(135deg, #22c55e, #4ade80);
+            color: #000;
+        }
+
+        .vein-cta {
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            color: #000;
+        }
+
+        .apps-footer {
+            text-align: center;
+            color: var(--gray);
+            margin-top: 2rem;
+            font-size: 0.95rem;
+        }
+
+        /* Team CTA Section */
+        .team-cta-section {
+            padding: 4rem 2rem;
+            background: linear-gradient(180deg, var(--black) 0%, var(--darker) 100%);
+            text-align: center;
+            border-top: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .team-cta-content h2 {
+            font-family: 'Cinzel', serif;
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .team-cta-content p {
+            color: var(--gray);
+            margin-bottom: 1.5rem;
+        }
+
+        .meet-team-btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .meet-team-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Community Section Styles */
+        .community-section {
+            padding: 6rem 2rem;
+            background: linear-gradient(180deg, var(--darker) 0%, var(--black) 100%);
+        }
+
+        .community-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .community-card {
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .community-card:hover {
+            border-color: rgba(212, 175, 55, 0.4);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .community-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .community-value {
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .community-label {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .community-link {
+            color: var(--gold);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: opacity 0.3s ease;
+        }
+
+        .community-link:hover {
+            opacity: 0.8;
+        }
+
+        /* Burn Section Styles */
+        .burn-section {
+            padding: 4rem 2rem;
+            background: linear-gradient(180deg, var(--black) 0%, #1a0a0a 100%);
+            border-top: 2px solid #8B0000;
+        }
+
+        .burn-warning-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .burn-warning-header h2 {
+            color: #ff4444;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .warning-icon {
+            font-size: 2rem;
+        }
+
+        .burn-disclaimer {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            padding: 1.5rem;
+            background: rgba(139, 0, 0, 0.2);
+            border: 1px solid #8B0000;
+            border-radius: 8px;
+            color: #ff6666;
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        .burn-disclaimer ul {
+            margin: 1rem 0 0 1.5rem;
+        }
+
+        .burn-disclaimer li {
+            margin: 0.5rem 0;
+        }
+
+        .burn-container {
+            display: flex;
+            justify-content: center;
+        }
+
+        .burn-box {
+            background: rgba(20, 10, 10, 0.8);
+            border: 1px solid #8B0000;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .burn-status {
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .burn-connect-btn {
+            background: #333;
+            color: var(--white);
+            border: 1px solid #555;
+            padding: 0.8rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .burn-connect-btn:hover {
+            background: #444;
+            border-color: var(--gold);
+        }
+
+        .burn-input-group {
+            margin: 1.5rem 0;
+            text-align: left;
+        }
+
+        .burn-input-group label {
+            display: block;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .burn-input-group input {
+            width: 100%;
+            padding: 0.8rem;
+            background: #1a1a1a;
+            border: 1px solid #333;
+            border-radius: 8px;
+            color: var(--white);
+            font-size: 1.2rem;
+            box-sizing: border-box;
+        }
+
+        .burn-input-group input:focus {
+            outline: none;
+            border-color: #8B0000;
+        }
+
+        .burn-balance {
+            color: var(--gray);
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+        }
+
+        .burn-balance span {
+            color: var(--gold);
+        }
+
+        .burn-btn {
+            background: linear-gradient(135deg, #8B0000, #cc0000);
+            color: var(--white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 700;
+            width: 100%;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .burn-btn:hover {
+            background: linear-gradient(135deg, #aa0000, #ee0000);
+            transform: scale(1.02);
+        }
+
+        .burn-btn:disabled {
+            background: #333;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .burn-tx-status {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+
+        .burn-footer-note {
+            text-align: center;
+            color: var(--gray);
+            font-size: 0.8rem;
+            margin-top: 2rem;
+            font-style: italic;
+        }
+
+        /* FAQ Section Styles */
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .faq-item:hover {
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 1.5rem;
+            background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.05));
+        }
+
+        .faq-toggle {
+            font-size: 1.5rem;
+            color: var(--gold);
+            font-weight: 300;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(45deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            background: rgba(0,0,0,0.2);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 300px;
+            padding: 1.5rem;
+        }
+
+        .faq-answer p {
+            color: var(--gray);
+            line-height: 1.7;
+        }
+
+        /* APR Dashboard Styles */
+        .apy-dashboard {
+            max-width: 1000px;
+            margin: 0 auto;
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .apy-header {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr 1fr 0.8fr 0.8fr 0.8fr;
+            padding: 1rem 1.5rem;
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05));
+            font-weight: 600;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--gold);
+        }
+
+        .apy-row {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr 1fr 1fr 0.8fr 0.8fr 0.8fr;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.1);
+            align-items: center;
+            transition: background 0.3s ease;
+        }
+
+        .apy-row:hover {
+            background: rgba(212, 175, 55, 0.05);
+        }
+
+        .apy-row:last-child {
+            border-bottom: none;
+        }
+
+        .apy-col {
+            font-size: 0.9rem;
+        }
+
+        .apy-dex {
+            font-weight: 600;
+            color: var(--white);
+        }
+
+        .apy-value {
+            color: var(--gray);
+        }
+
+        .apy-percent {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .apy-high {
+            color: #4CAF50;
+        }
+
+        .apy-medium {
+            color: var(--gold);
+        }
+
+        .apy-low {
+            color: var(--gray);
+        }
+
+        .apy-add-btn {
+            background: transparent;
+            border: 1px solid var(--gold);
+            color: var(--gold);
+            padding: 0.4rem 1rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .apy-add-btn:hover {
+            background: var(--gold);
+            color: var(--black);
+        }
+
+        .apy-loading {
+            padding: 3rem;
+        }
+
+        .apy-sortable {
+            cursor: pointer;
+            user-select: none;
+            transition: color 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .apy-sortable:hover {
+            color: #fff;
+        }
+
+        .apy-sort-active {
+            color: #fff !important;
+        }
+
+        .sort-arrow {
+            font-size: 0.7rem;
+            opacity: 0.4;
+            transition: opacity 0.2s ease;
+        }
+
+        .apy-sort-active .sort-arrow {
+            opacity: 1;
+            color: var(--gold);
+        }
+            text-align: center;
+            color: var(--gray);
+        }
+
+        .apy-disclaimer {
+            max-width: 1000px;
+            margin: 1.5rem auto 0;
+            text-align: center;
+            font-size: 0.75rem;
+            color: var(--gray);
+            opacity: 0.6;
+        }
+
+        /* Whitepaper Section */
+        .whitepaper-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .whitepaper-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .wp-item {
+            background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            border: 1px solid rgba(212, 175, 55, 0.15);
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .wp-item:hover {
+            border-color: rgba(212, 175, 55, 0.4);
+            transform: translateY(-3px);
+        }
+
+        .wp-item h3 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            letter-spacing: 0.05em;
+        }
+
+        .wp-item p {
+            color: var(--gray);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        .wp-featured {
+            background: linear-gradient(135deg, rgba(212, 175, 55, 0.15), rgba(212, 175, 55, 0.05));
+            border-color: rgba(212, 175, 55, 0.4);
+        }
+
+        .wp-featured h3 {
+            font-size: 1.2rem;
+        }
+
+        .wp-featured p {
+            color: var(--white);
+        }
+
+        .wp-featured strong {
+            color: var(--gold);
+        }
+
+        .wp-featured em {
+            font-style: italic;
+            color: var(--gold);
+        }
+
+        @media (max-width: 768px) {
+            .apy-header, .apy-row {
+                grid-template-columns: 1fr 1fr 1fr 0.8fr;
+                gap: 0.5rem;
+            }
+            
+            .apy-header .apy-col:nth-child(3),
+            .apy-header .apy-col:nth-child(4),
+            .apy-header .apy-col:nth-child(5),
+            .apy-row .apy-col:nth-child(3),
+            .apy-row .apy-col:nth-child(4),
+            .apy-row .apy-col:nth-child(5) {
+                display: none;
+            }
+        }
+
+        .burn-indicator {
+            font-size: 0.6rem;
+            color: #FF6B35;
+            background: rgba(255, 107, 53, 0.15);
+            padding: 0.2rem 0.5rem;
+            border-radius: 3px;
+            margin-left: 0.3rem;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .loading-dots {
+            animation: pulse 1s ease-in-out infinite;
+        }
+
+        @keyframes countUp {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes glowPulse {
+            0% { text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
+            50% { text-shadow: 0 0 30px rgba(212, 175, 55, 0.9), 0 0 50px rgba(212, 175, 55, 0.5); }
+            100% { text-shadow: 0 0 10px rgba(212, 175, 55, 0.5); }
+        }
+
+        .stat-value.updated {
+            animation: countUp 0.5s ease-out;
+        }
+
+        #scarcity-hero.updated {
+            animation: countUp 0.5s ease-out, glowPulse 2s ease-in-out 3;
+        }
+
+        #burned-amount {
+            color: #FF6B35;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .desktop-only {
+                display: none;
+            }
+
+            .mobile-only {
+                display: none;
+            }
+
+            .nav-links {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(10, 10, 10, 0.98);
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 2rem;
+                z-index: 1000;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .nav-links.active .mobile-only {
+                display: block;
+            }
+
+            .nav-links a {
+                font-size: 1.2rem;
+            }
+
+            .nav-links li {
+                text-align: center;
+            }
+
+            .mobile-buy-btn {
+                display: inline-block;
+                margin-top: 1rem;
+                padding: 1rem 2.5rem !important;
+                background: linear-gradient(135deg, var(--gold-dark), var(--gold)) !important;
+                color: var(--black) !important;
+                font-weight: 600;
+                font-size: 1rem;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+                border-radius: 4px;
+            }
+
+            .hero-stats {
+                gap: 2rem;
+            }
+
+            .stat-value {
+                font-size: 1.8rem;
+            }
+
+            .table-row {
+                grid-template-columns: 1.5fr 1fr 1fr;
+                padding: 1rem;
+                font-size: 0.85rem;
+            }
+
+            .roadmap-item {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .roadmap-phase {
+                text-align: left;
+                width: auto;
+            }
+
+            .roadmap-content {
+                border-left: none;
+                padding-left: 0;
+                border-top: 1px solid rgba(212, 175, 55, 0.3);
+                padding-top: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Global Gold Particles -->
+    <div class="ambient-glow"></div>
+    <div class="global-particles" id="global-particles"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="logo-container">
+            <img src="logo.png" alt="BaseGold" class="nav-logo">
+            <span class="logo gold-text">BASEGOLD</span>
+        </div>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="#features">Features</a></li>
+            <li><a href="https://basegold.io/whitepaper.pdf" target="_blank">Whitepaper</a></li>
+            <li><a href="#apr">APR</a></li>
+            <li><a href="#roadmap">Roadmap</a></li>
+            <li><a href="team.html">Team</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="games.html" class="nav-highlight"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;margin-right:4px"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/></svg>Games</a></li>
+            <li><a href="https://mineswap.org" target="_blank" class="nav-highlight nav-primary"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;margin-right:4px"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>DEX Aggregator</a></li>
+            <li><a href="governance.html">Governance</a></li>
+        </ul>
+        <button class="hamburger" id="hamburger" onclick="toggleMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+    </nav>
+
+    <!-- Live Price Ticker -->
+    <div class="price-ticker" id="price-ticker">
+        <a href="https://dexscreener.com/base/0x36b712A629095234F2196BbB000D1b96C12Ce78e" target="_blank" class="ticker-content">
+            <div class="ticker-item">
+                <span class="ticker-label">BG Price</span>
+                <span class="ticker-value" id="ticker-price">$--</span>
+                <span class="ticker-change" id="ticker-change">--%</span>
+            </div>
+            <div class="ticker-divider"></div>
+            <div class="ticker-item">
+                <span class="ticker-label">24h Volume</span>
+                <span class="ticker-value" id="ticker-volume">$--</span>
+            </div>
+            <div class="ticker-divider"></div>
+            <div class="ticker-item">
+                <span class="ticker-label">Market Cap</span>
+                <span class="ticker-value" id="ticker-mcap">$--</span>
+            </div>
+            <div class="ticker-divider"></div>
+            <div class="ticker-item">
+                <span class="ticker-label">24h Txns</span>
+                <span class="ticker-value" id="ticker-txns">--</span>
+            </div>
+        </a>
+    </div>
+
+    <!-- Sticky CTA Button -->
+    <a href="buy.html" class="sticky-cta" id="sticky-cta">
+        Buy $BG <span class="sticky-price" id="sticky-price"></span>
+    </a>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="particles">
+            <div class="particle" style="left: 10%; top: 20%; animation-delay: 0s;"></div>
+            <div class="particle" style="left: 20%; top: 60%; animation-delay: 1s;"></div>
+            <div class="particle" style="left: 80%; top: 30%; animation-delay: 2s;"></div>
+            <div class="particle" style="left: 70%; top: 70%; animation-delay: 0.5s;"></div>
+            <div class="particle" style="left: 90%; top: 50%; animation-delay: 1.5s;"></div>
+            <div class="particle" style="left: 5%; top: 80%; animation-delay: 2.5s;"></div>
+            <div class="particle" style="left: 50%; top: 10%; animation-delay: 3s;"></div>
+        </div>
+        
+        <div class="hero-content">
+            <span class="hero-badge">Built on Base Network</span>
+            <h1 class="gold-text">BASEGOLD</h1>
+            <p class="hero-tagline">The Store of Value for <a href="https://mineswap.org" style="color: #d4a437; text-decoration: none;">MineSwap.org</a></p>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-value" id="total-supply">
+                        <span class="loading-dots">...</span>
+                    </div>
+                    <div class="stat-label">Circulating Supply <span class="burn-indicator"><svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg> Live</span></div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="burned-amount">0</div>
+                    <div class="stat-label">Forever Burned <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value" id="dex-liquidity">
+                        <span class="loading-dots">...</span>
+                    </div>
+                    <div class="stat-label">DEX Liquidity <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/><path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/></svg></div>
+                </div>
+                <div class="stat">
+                    <div class="stat-value gold-text" id="scarcity-hero">2,100x</div>
+                    <div class="stat-label">Scarcer than BTC</div>
+                </div>
+            </div>
+
+            <!-- SUPER FUN ENTER MINE BUTTON -->
+            <div class="mine-btn-container">
+                <a href="https://mineswap.app/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" class="enter-mine-btn">
+                    <span class="pickaxe"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="m14 12-8.5 8.5a2.12 2.12 0 1 1-3-3L11 9"/><path d="M15 13 9 7l4-4 6 6h3a8 8 0 0 1-7 7z"/></svg></span>
+                    Enter Your Gold Mine
+                    <span class="pickaxe"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="m14 12-8.5 8.5a2.12 2.12 0 1 1-3-3L11 9"/><path d="M15 13 9 7l4-4 6 6h3a8 8 0 0 1-7 7z"/></svg></span>
+                </a>
+                <span class="mine-btn-subtitle"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> Season 3 Active • Win 10+ BG! <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span>
+            </div>
+
+            <div class="hero-buttons">
+                <a href="https://mineswap.org" target="_blank" class="buy-btn">Buy on MineSwap</a>
+                <a href="https://basegold.io/whitepaper.pdf" target="_blank" class="secondary-btn">Whitepaper</a>
+                <a href="#contract" class="secondary-btn">View Contract</a>
+            </div>
+            
+            <div class="hero-social">
+                <a href="https://x.com/BaseGold_BG" target="_blank" class="hero-twitter">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+                    <span>@BaseGold_BG</span>
+                </a>
+                <a href="https://t.me/+ZzMI6IXV_KFiNzkx" target="_blank" class="hero-telegram">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    <span>Telegram</span>
+                </a>
+                <a href="https://coinmarketcap.com/currencies/basegold/" target="_blank" class="hero-cmc">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M7 14l3-4 3 2 4-5"/></svg>
+                    <span>CoinMarketCap</span>
+                </a>
+                <a href="https://www.geckoterminal.com/base/tokens/0x36b712A629095234F2196BbB000D1b96C12Ce78e" target="_blank" class="hero-gecko">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+                    <span>GeckoTerminal</span>
+                </a>
+                <a href="https://dexscreener.com/base/0x36b712A629095234F2196BbB000D1b96C12Ce78e" target="_blank" class="hero-dex">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="6" y1="3" x2="6" y2="21"/><rect x="4" y="7" width="4" height="10" rx="0.5"/><line x1="18" y1="3" x2="18" y2="21"/><rect x="16" y="11" width="4" height="6" rx="0.5"/></svg>
+                    <span>DEX Screener</span>
+                </a>
+                <a href="https://app.uniswap.org/explore/tokens/base/0x36b712A629095234F2196BbB000D1b96C12Ce78e" target="_blank" class="hero-uni">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
+                    <span>Uniswap</span>
+                </a>
+                <a href="https://www.coinbase.com/price/basegold-base-0x36b712a629095234f2196bbb000d1b96c12ce78e-token" target="_blank" class="hero-coinbase">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M17 15a5 5 0 1 1 0-6"/></svg>
+                    <span>Coinbase</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scarcity Section -->
+    <section class="scarcity" id="scarcity">
+        <div class="section-header">
+            <h2 class="gold-text">Extreme Scarcity</h2>
+            <p>With only 10,000 tokens ever created and six burn mechanisms removing them permanently, BaseGold is engineered for increasing scarcity.</p>
+        </div>
+
+        <div class="comparison-table">
+            <div class="table-row table-header">
+                <span>Asset</span>
+                <span class="supply">Max Supply</span>
+                <span class="factor">Scarcity</span>
+            </div>
+            <div class="table-row">
+                <span class="asset">Bitcoin (BTC)</span>
+                <span class="supply">21,000,000</span>
+                <span class="factor">1x</span>
+            </div>
+            <div class="table-row">
+                <span class="asset">Ethereum (ETH)</span>
+                <span class="supply">~120,000,000</span>
+                <span class="factor">0.17x</span>
+            </div>
+            <div class="table-row highlight">
+                <span class="asset"><strong>BaseGold (BG)</strong></span>
+                <span class="supply"><strong id="table-supply">10,000</strong></span>
+                <span class="factor" id="scarcity-factor">2,100x</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Bitcoin vs BaseGold Section -->
+    <section class="comparison-section">
+        <div class="section-header">
+            <h2 class="gold-text">Bitcoin vs BaseGold</h2>
+            <p>Same vision, next-generation execution</p>
+        </div>
+
+        <div class="comparison-grid">
+            <div class="comparison-card btc-card">
+                <div class="comparison-header">
+                    <span class="comparison-icon">₿</span>
+                    <h3>Bitcoin</h3>
+                    <span class="comparison-tag outdated">Generation 1</span>
+                </div>
+                <div class="comparison-stats">
+                    <div class="comparison-stat">
+                        <span class="stat-label">Transaction Speed</span>
+                        <span class="stat-value negative">15-30 minutes</span>
+                    </div>
+                    <div class="comparison-stat">
+                        <span class="stat-label">Transaction Fee</span>
+                        <span class="stat-value negative">~$5.00</span>
+                    </div>
+                    <div class="comparison-stat">
+                        <span class="stat-label">Supply Model</span>
+                        <span class="stat-value negative">Still minting until ~2140</span>
+                    </div>
+                    <div class="comparison-stat">
+                        <span class="stat-label">Max Supply</span>
+                        <span class="stat-value">21,000,000</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comparison-vs">VS</div>
+
+            <div class="comparison-card bg-card">
+                <div class="comparison-header">
+                    <img src="logo.png" alt="BaseGold" class="comparison-icon comparison-logo">
+                    <h3>BaseGold</h3>
+                    <span class="comparison-tag modern">Next Gen</span>
+                </div>
+                <div class="comparison-stats">
+                    <div class="comparison-stat">
+                        <span class="stat-label">Transaction Speed</span>
+                        <span class="stat-value positive">~1 second</span>
+                    </div>
+                    <div class="comparison-stat">
+                        <span class="stat-label">Transaction Fee</span>
+                        <span class="stat-value positive">< $0.01</span>
+                    </div>
+                    <div class="comparison-stat">
+                        <span class="stat-label">Supply Model</span>
+                        <span class="stat-value positive">Deflationary (burning)</span>
+                    </div>
+                    <div class="comparison-stat">
+                        <span class="stat-label">Max Supply</span>
+                        <span class="stat-value positive">10,000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p class="comparison-footer">Built on Base Network (Coinbase L2) — Ethereum security with modern performance</p>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features">
+        <div class="section-header">
+            <h2 class="gold-text">Core Features</h2>
+            <p>Built with purpose. Designed for value.</p>
+        </div>
+
+        <div class="features-grid">
+            <a href="https://mineswap.org/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="feature-card">
+                <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div>
+                <h3>Six Burn Mechanisms</h3>
+                <p>Deflationary pressure from every angle — voluntary burns, MineSwap buyback-and-burn, mine plot purchases, shop purchases, Gold Vein referral burns, and Golden Council protocol burns.</p>
+            </a>
+            <a href="https://mineswap.org/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="feature-card">
+                <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="m14 12-8.5 8.5a2.12 2.12 0 1 1-3-3L11 9"/><path d="M15 13 9 7l4-4 6 6h3a8 8 0 0 1-7 7z"/></svg></div>
+                <h3>The Mine & NFT Plots</h3>
+                <p>Purchase your personalized ERC-721 NFT mine plot for 0.10 BG. Compete in seasonal tournaments, earn upgrades, and trade your plot on OpenSea with dynamic on-chain metadata.</p>
+            </a>
+            <a href="https://mineswap.org" target="_blank" class="feature-card">
+                <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg></div>
+                <h3>MineSwap DEX Aggregator</h3>
+                <p>Near-zero fee trading across Uniswap V2/V3/V4, Aerodrome & more — with BG cashback rebates on every swap. Our smart router finds the best price while the buyback-and-burn engine contracts supply.</p>
+            </a>
+            <a href="https://mineswap.org/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="feature-card">
+                <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></svg></div>
+                <h3>Gold Vein Referrals</h3>
+                <p>Seven-tier on-chain referral system — 95% of fees go to users, 5% burned. Earn passive income across seven levels with fully trustless smart contract distribution.</p>
+            </a>
+            <a href="https://mineswap.org/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="feature-card">
+                <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5.21 16.5h13.58"/></svg></div>
+                <h3>Golden Council</h3>
+                <p>Hold just 1 BG to join the Golden Council — BaseGold's governance body. Vote on MineSwap fee ratios, burn scheduling, treasury disbursements, and protocol direction.</p>
+            </a>
+            <a href="https://mineswap.org/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="feature-card">
+                <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+                <h3>Trustless Security</h3>
+                <p>Built on OpenZeppelin audited standards with Blockaid security review. All contracts verified on BaseScan. No administrative override on user funds — fully trustless execution.</p>
+            </a>
+        </div>
+    </section>
+
+    <!-- Buy Section -->
+    <section class="scarcity" id="buy">
+        <div class="section-header">
+            <h2 class="gold-text">Trade on 8 DEXs via MineSwap</h2>
+            <p>MineSwap aggregates all major Base DEXs into one interface — near-zero fees with BG cashback rebates. <a href="https://mineswap.org" target="_blank" style="color: #D4AF37; text-decoration: underline;">Trade now at mineswap.org →</a></p>
+        </div>
+
+        <div class="dex-grid">
+            <a href="https://mineswap.org" target="_blank" class="dex-card" style="border-color: rgba(212,175,55,0.4); background: linear-gradient(145deg, rgba(212,175,55,0.08), rgba(20,20,20,0.95)); grid-column: span 2;">
+                <span style="color: #D4AF37; font-size: 1.1rem;"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="m14 12-8.5 8.5a2.12 2.12 0 1 1-3-3L11 9"/><path d="M15 13 9 7l4-4 6 6h3a8 8 0 0 1-7 7z"/></svg> MineSwap — DEX Aggregator</span>
+                <span class="status" style="color: #D4AF37;">● Near-0 Fees + BG Rebates</span>
+            </a>
+            <a href="https://app.uniswap.org/swap?chain=base&outputCurrency=0x36b712A629095234F2196BbB000D1b96C12Ce78e" target="_blank" class="dex-card">
+                <span>Uniswap</span>
+                <span class="status">● Live</span>
+            </a>
+            <a href="https://www.sushi.com/swap?chainId=8453&token1=0x36b712A629095234F2196BbB000D1b96C12Ce78e" target="_blank" class="dex-card">
+                <span>SushiSwap</span>
+                <span class="status">● Live</span>
+            </a>
+            <a href="https://aerodrome.finance/swap?from=eth&to=0x36b712A629095234F2196BbB000D1b96C12Ce78e" target="_blank" class="dex-card">
+                <span>Aerodrome</span>
+                <span class="status">● Live</span>
+            </a>
+            <a href="https://pancakeswap.finance/swap?chain=base&outputCurrency=0x36b712A629095234F2196BbB000D1b96C12Ce78e" target="_blank" class="dex-card">
+                <span>PancakeSwap</span>
+                <span class="status">● Live</span>
+            </a>
+            <a href="https://app.alienbase.xyz/swap" target="_blank" class="dex-card">
+                <span>Alienbase</span>
+                <span class="status">● Live</span>
+            </a>
+            <a href="https://swapbased.finance/#/swap" target="_blank" class="dex-card">
+                <span>SwapBased</span>
+                <span class="status">● Live</span>
+            </a>
+            <a href="https://www.dackieswap.xyz/swap?chain=base" target="_blank" class="dex-card">
+                <span>DackieSwap</span>
+                <span class="status">● Live</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- MineSwap DEX Aggregator Promotion -->
+    <section style="padding: 4rem 2rem; text-align: center; background: linear-gradient(135deg, rgba(212, 175, 55, 0.06), rgba(0,0,0,0.95)); border-top: 1px solid rgba(212,175,55,0.15); border-bottom: 1px solid rgba(212,175,55,0.15);">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div style="margin-bottom: 0.5rem;"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg></div>
+            <h2 class="gold-text" style="font-size: 2.2rem; margin-bottom: 0.8rem; font-family: 'Cinzel', serif;">MineSwap DEX Aggregator</h2>
+            <p style="color: #ccc; margin-bottom: 1.5rem; font-size: 1.15rem; line-height: 1.7;">
+                One interface. Every major Base DEX. MineSwap routes your trades through Uniswap V2, V3, V4, Aerodrome, and more to find the best price — with <strong style="color: #D4AF37;">near-zero fees</strong> and <strong style="color: #D4AF37;">BG cashback rebates</strong> on every swap.
+            </p>
+            <div style="display: flex; justify-content: center; gap: 2.5rem; flex-wrap: wrap; margin-bottom: 2rem;">
+                <div style="text-align: center;">
+                    <div style="color: #D4AF37; font-size: 1.8rem; font-weight: bold; font-family: 'Cinzel', serif;">≈0%</div>
+                    <div style="color: #888; font-size: 0.85rem; margin-top: 0.3rem;">Trading Fees</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="color: #D4AF37; font-size: 1.8rem; font-weight: bold; font-family: 'Cinzel', serif;">BG</div>
+                    <div style="color: #888; font-size: 0.85rem; margin-top: 0.3rem;">Cashback Rebates</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="color: #D4AF37; font-size: 1.8rem; font-weight: bold; font-family: 'Cinzel', serif;">V4</div>
+                    <div style="color: #888; font-size: 0.85rem; margin-top: 0.3rem;">Uniswap V4 Ready</div>
+                </div>
+                <div style="text-align: center;">
+                    <div style="margin-bottom: 0.25rem;"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div>
+                    <div style="color: #888; font-size: 0.85rem; margin-top: 0.3rem;">Auto Buyback & Burn</div>
+                </div>
+            </div>
+            <a href="https://mineswap.org" 
+               target="_blank"
+               style="display: inline-block; background: linear-gradient(135deg, #D4AF37, #B8960C); color: #000; font-weight: bold; padding: 1rem 3rem; border-radius: 12px; text-decoration: none; font-size: 1.15rem; transition: transform 0.3s, box-shadow 0.3s; letter-spacing: 0.5px;"
+               onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 30px rgba(212,175,55,0.5)';"
+               onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="m14 12-8.5 8.5a2.12 2.12 0 1 1-3-3L11 9"/><path d="M15 13 9 7l4-4 6 6h3a8 8 0 0 1-7 7z"/></svg> Trade on MineSwap.org
+            </a>
+            <p style="color: #666; font-size: 0.85rem; margin-top: 1rem;">Smart routing across all Base liquidity — every trade burns BG</p>
+        </div>
+    </section>
+
+    <!-- Contract Section -->
+    <section class="contract-section" id="contract">
+        <div class="section-header">
+            <h2 class="gold-text">Contract Address</h2>
+            <p>Verified on BaseScan. Click to copy.</p>
+        </div>
+
+        <div class="contract-box">
+            <div class="contract-label">BG Token Contract (Base Network)</div>
+            <div class="contract-address" onclick="copyContract()" id="contract-addr">
+                0x36b712A629095234F2196BbB000D1b96C12Ce78e
+            </div>
+            <p class="copy-hint" id="copy-hint">Click address to copy</p>
+            <a href="https://basescan.org/address/0x36b712A629095234F2196BbB000D1b96C12Ce78e" target="_blank" class="secondary-btn" style="margin-top: 1rem; display: inline-block;">View on BaseScan</a>
+        </div>
+    </section>
+
+    <!-- Roadmap Section -->
+    <section id="roadmap">
+        <div class="section-header">
+            <h2 class="gold-text">Roadmap</h2>
+            <p>Our journey to becoming the digital gold standard.</p>
+        </div>
+
+        <div class="roadmap">
+            <div class="roadmap-item">
+                <div class="roadmap-phase">
+                    <div class="phase-label">Phase 1</div>
+                    <div class="phase-status">✓ Complete</div>
+                </div>
+                <div class="roadmap-content">
+                    <h4>Launch</h4>
+                    <p>Contract deployment on Base Network. Liquidity established across 8 DEXs. Whitepaper and documentation published. DexScreener Enhanced listing. CoinMarketCap listing.</p>
+                </div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="roadmap-phase">
+                    <div class="phase-label">Phase 2</div>
+                    <div class="phase-status">In Progress</div>
+                </div>
+                <div class="roadmap-content">
+                    <h4>Growth</h4>
+                    <p>MineSwap DEX deployment with buyback-and-burn engine. Trader cashback rebate system. The Mine application with NFT mine plot minting. OpenSea marketplace integration. Buyback-and-burn shop. Golden Council governance activation. CoinGecko listing. Centralized exchange listing.</p>
+                </div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="roadmap-phase">
+                    <div class="phase-label">Phase 3</div>
+                </div>
+                <div class="roadmap-content">
+                    <h4>DeFi Integration</h4>
+                    <p>Aave lending integration. Airdrop distribution system tied to mine plot metadata. Staking platform with tiered reward periods. Cross-chain expansion evaluation.</p>
+                </div>
+            </div>
+
+            <div class="roadmap-item">
+                <div class="roadmap-phase">
+                    <div class="phase-label">Phase 4</div>
+                </div>
+                <div class="roadmap-content">
+                    <h4>Ecosystem</h4>
+                    <p>Tokenized RWA liquidity pairs (gold, silver, equities, commodities). Merchant payment integrations. NFT collection for holders. Advanced DeFi protocol partnerships. Tier 1 exchange listings (Coinbase, Binance). Mobile application and wallet deployment.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Apps Section - Gold Mine & Gold Vein -->
+    <section class="apps-section" id="apps">
+        <div class="section-header">
+            <h2 class="gold-text">BaseGold Apps</h2>
+            <p>Four on-chain applications powering the BaseGold ecosystem — trade, compete, conquer, and earn</p>
+        </div>
+
+        <div class="apps-grid">
+            <!-- MineSwap DEX Aggregator Card -->
+            <a href="https://mineswap.org" target="_blank" class="app-card mine-card" style="border-color: rgba(212,175,55,0.3);">
+                <div class="app-badge live-badge" style="background: rgba(212,175,55,0.2); color: #D4AF37;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg> DEX Aggregator</div>
+                <div class="app-icon"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg></div>
+                <h3 class="app-title">MineSwap</h3>
+                <p class="app-tagline">Near-Zero Fee Trading with BG Rebates</p>
+                <div class="app-stats">
+                    <div class="app-stat">
+                        <span class="stat-num">≈0%</span>
+                        <span class="stat-desc">Trading Fee</span>
+                    </div>
+                    <div class="app-stat">
+                        <span class="stat-num">V4</span>
+                        <span class="stat-desc">Uniswap Ready</span>
+                    </div>
+                </div>
+                <ul class="app-features">
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></svg> BG cashback rebates on every swap</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg> Autonomous buyback-and-burn engine</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M2 18h1.4c1.3 0 2.5-.6 3.3-1.7l6.1-8.6c.7-1.1 2-1.7 3.3-1.7H22"/><path d="m18 2 4 4-4 4"/><path d="M2 6h1.9c1.5 0 2.9.9 3.6 2.2"/><path d="M22 18h-5.9c-1.3 0-2.6-.7-3.3-1.8l-.5-.8"/><path d="m18 14 4 4-4 4"/></svg> Smart routing across all Base DEXs</li>
+                </ul>
+                <div class="app-cta mine-cta">Trade Now →</div>
+            </a>
+
+            <!-- Gold Mine Card -->
+            <a href="https://mineswap.org/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="app-card mine-card">
+                <div class="app-badge live-badge"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="m14 12-8.5 8.5a2.12 2.12 0 1 1-3-3L11 9"/><path d="M15 13 9 7l4-4 6 6h3a8 8 0 0 1-7 7z"/></svg> Season 3 Live</div>
+                <div class="app-icon"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="m14 12-8.5 8.5a2.12 2.12 0 1 1-3-3L11 9"/><path d="M15 13 9 7l4-4 6 6h3a8 8 0 0 1-7 7z"/></svg></div>
+                <h3 class="app-title">The Gold Mine</h3>
+                <p class="app-tagline">Mine, Compete & Earn NFT Plots</p>
+                <div class="app-stats">
+                    <div class="app-stat">
+                        <span class="stat-num">10+ BG</span>
+                        <span class="stat-desc">Prize Pool</span>
+                    </div>
+                    <div class="app-stat">
+                        <span class="stat-num">25x</span>
+                        <span class="stat-desc">Max Multiplier</span>
+                    </div>
+                </div>
+                <ul class="app-features">
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> 1st place wins <strong>2.0 BG + Golden Council seat</strong></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><circle cx="13.5" cy="6.5" r=".5" fill="#D4AF37"/><circle cx="17.5" cy="10.5" r=".5" fill="#D4AF37"/><circle cx="8.5" cy="7.5" r=".5" fill="#D4AF37"/><circle cx="6.5" cy="12.5" r=".5" fill="#D4AF37"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg> Mint your personal ERC-721 NFT mine plot</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg> Shop purchases = 100% burned</li>
+                </ul>
+                <div class="app-cta mine-cta">Play Now →</div>
+            </a>
+
+            <!-- War Card -->
+            <a href="https://mineswap.app/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="app-card war-card">
+                <div class="app-badge live-badge" style="background: rgba(220, 38, 38, 0.2); color: #ef4444;"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" x2="9" y1="14" y2="18"/><line x1="7" x2="4" y1="17" y2="20"/><line x1="3" x2="5" y1="19" y2="21"/></svg> Live Now</div>
+                <div class="app-icon"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" x2="9" y1="14" y2="18"/><line x1="7" x2="4" y1="17" y2="20"/><line x1="3" x2="5" y1="19" y2="21"/></svg></div>
+                <h3 class="app-title">War</h3>
+                <p class="app-tagline">Build, Raid & Conquer in The Mine</p>
+                <div class="app-stats">
+                    <div class="app-stat">
+                        <span class="stat-num"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" x2="9" y1="14" y2="18"/><line x1="7" x2="4" y1="17" y2="20"/><line x1="3" x2="5" y1="19" y2="21"/></svg></span>
+                        <span class="stat-desc">Raid & Defend</span>
+                    </div>
+                    <div class="app-stat">
+                        <span class="stat-num"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="M22 20v-9H2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2Z"/><path d="M18 11V4H6v7"/><path d="M15 22v-4a3 3 0 0 0-6 0v4"/><path d="M3 11h18"/><path d="M6 4V2"/><path d="M18 4V2"/><path d="M10 4V2"/><path d="M14 4V2"/></svg></span>
+                        <span class="stat-desc">Build Barracks</span>
+                    </div>
+                </div>
+                <ul class="app-features">
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M22 20v-9H2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2Z"/><path d="M18 11V4H6v7"/><path d="M15 22v-4a3 3 0 0 0-6 0v4"/><path d="M3 11h18"/><path d="M6 4V2"/><path d="M18 4V2"/><path d="M10 4V2"/><path d="M14 4V2"/></svg> Build barracks &amp; train raider units</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><polyline points="14.5 17.5 3 6 3 3 6 3 17.5 14.5"/><line x1="13" x2="19" y1="19" y2="13"/><line x1="16" x2="20" y1="16" y2="20"/><line x1="19" x2="21" y1="21" y2="19"/><polyline points="14.5 6.5 18 3 21 3 21 6 17.5 9.5"/><line x1="5" x2="9" y1="14" y2="18"/><line x1="7" x2="4" y1="17" y2="20"/><line x1="3" x2="5" y1="19" y2="21"/></svg> Deploy armies to raid enemy mines</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/></svg> Defend your gold from incoming attacks</li>
+                </ul>
+                <div class="app-cta" style="background: rgba(220, 38, 38, 0.2); color: #ef4444; border: 1px solid rgba(220, 38, 38, 0.4); padding: 0.8rem 2rem; border-radius: 12px; font-weight: 600;">Go to War →</div>
+            </a>
+
+            <!-- Gold Vein Card -->
+            <a href="https://mineswap.org/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="app-card vein-card">
+                <div class="app-badge passive-badge"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></svg> Passive Income</div>
+                <div class="app-icon"><svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></svg></div>
+                <h3 class="app-title">The Gold Vein</h3>
+                <p class="app-tagline">7-Level On-Chain Referral Protocol</p>
+                <div class="app-stats">
+                    <div class="app-stat">
+                        <span class="stat-num">0.10 BG</span>
+                        <span class="stat-desc">One-Time Fee</span>
+                    </div>
+                    <div class="app-stat">
+                        <span class="stat-num">95%</span>
+                        <span class="stat-desc">To Users</span>
+                    </div>
+                </div>
+                <ul class="app-features">
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M6 3h12l4 6-10 13L2 9Z"/><path d="M11 3 8 9l4 13 4-13-3-6"/><path d="M2 9h20"/></svg> 60% direct reward on every referral activation</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg> 5% of every activation permanently burned</li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v4a2 2 0 0 0 2 2h4"/><path d="M10 9H8"/><path d="M16 13H8"/><path d="M16 17H8"/></svg> Fully on-chain, verified smart contract</li>
+                </ul>
+                <div class="app-cta vein-cta">Start Earning →</div>
+            </a>
+        </div>
+
+        <p class="apps-footer"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg> Every mine purchase, shop upgrade, and referral activation burns $BG — more activity = more deflation</p>
+    </section>
+
+    <!-- Meet the Team CTA -->
+    <section class="team-cta-section">
+        <div class="team-cta-content">
+            <h2 class="gold-text">The Golden Council</h2>
+            <p>Meet the team behind BaseGold</p>
+            <a href="team.html" class="meet-team-btn">Meet the Team →</a>
+        </div>
+    </section>
+
+    <!-- Community Metrics Section -->
+    <section class="community-section" id="community">
+        <div class="section-header">
+            <h2 class="gold-text">Join the Golden Community</h2>
+            <p>Growing every day. Be part of the movement.</p>
+        </div>
+
+        <div class="community-grid">
+            <div class="community-card">
+                <div class="community-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+                <div class="community-value">View All</div>
+                <div class="community-label">Token Holders</div>
+                <a href="https://basescan.org/token/0x36b712A629095234F2196BbB000D1b96C12Ce78e#balances" target="_blank" class="community-link">View on BaseScan →</a>
+            </div>
+            <div class="community-card">
+                <div class="community-icon">𝕏</div>
+                <div class="community-value">Follow Us</div>
+                <div class="community-label">Twitter Community</div>
+                <a href="https://x.com/BaseGold_BG" target="_blank" class="community-link">@BaseGold_BG →</a>
+            </div>
+            <div class="community-card">
+                <div class="community-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></div>
+                <div class="community-value">Join Chat</div>
+                <div class="community-label">Telegram Group</div>
+                <a href="https://t.me/+ZzMI6IXV_KFiNzkx" target="_blank" class="community-link">Join Telegram →</a>
+            </div>
+            <div class="community-card">
+                <div class="community-icon"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><line x1="12" x2="12" y1="20" y2="10"/><line x1="18" x2="18" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="16"/></svg></div>
+                <div class="community-value" id="community-txns">--</div>
+                <div class="community-label">24h Transactions</div>
+                <a href="https://basescan.org/token/0x36b712A629095234F2196BbB000D1b96C12Ce78e" target="_blank" class="community-link">View Activity →</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Burn Section - Hidden at bottom -->
+
+    <!-- Whitepaper Section -->
+    <section id="whitepaper" class="scarcity">
+        <div class="section-header">
+            <h2 class="gold-text">Whitepaper</h2>
+            <p>Learn about BaseGold's vision, tokenomics, and roadmap.</p>
+        </div>
+
+        <div class="whitepaper-content">
+            <div class="whitepaper-highlights">
+                <div class="wp-item">
+                    <h3>Executive Summary</h3>
+                    <p>A purely deflationary digital asset with a fixed supply of 10,000 tokens — 2,100x scarcer than Bitcoin — deployed on Base Network with four integrated systems driving continuous supply contraction.</p>
+                </div>
+                <div class="wp-item wp-featured">
+                    <h3><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg> Inverse Bitcoin Model</h3>
+                    <p>Bitcoin <em>mines</em> new tokens into circulation. BaseGold does the <em>opposite</em> — we <strong>burn</strong> tokens out of existence. Six deflationary burn mechanisms operate across every layer of the protocol, from voluntary holder burns to autonomous MineSwap buyback-and-burn cycles.</p>
+                </div>
+                <div class="wp-item">
+                    <h3>MineSwap DEX</h3>
+                    <p>A five-contract decentralized exchange with autonomous buyback-and-burn engine and trader cashback rebate system. Every trade fuels deflation.</p>
+                </div>
+                <div class="wp-item">
+                    <h3>The Mine & NFT Plots</h3>
+                    <p>Interactive mining application where each 0.10 BG purchase mints a personalized ERC-721 NFT mine plot — tradeable on OpenSea with dynamic metadata that grows with your achievements.</p>
+                </div>
+                <div class="wp-item">
+                    <h3>Gold Vein Referrals</h3>
+                    <p>Seven-tier on-chain referral protocol distributing 95% of every activation fee to users, with 5% permanently burned. No middleman, no platform fee — pure peer-to-peer rewards.</p>
+                </div>
+                <div class="wp-item">
+                    <h3>Store-of-Value Backing</h3>
+                    <p>Liquidity pairs provisioned against ETH, BTC, LTC, and XRP — anchoring BaseGold to the strongest store-of-value assets. Future tokenized RWA pairs planned.</p>
+                </div>
+            </div>
+            <a href="https://basegold.io/whitepaper.pdf" target="_blank" class="buy-btn" style="margin-top: 2rem;">Download Whitepaper v2.0 (PDF)</a>
+        </div>
+    </section>
+
+    <!-- APR Dashboard Section -->
+    <section id="apr" class="scarcity">
+        <div class="section-header">
+            <h2 class="gold-text">Liquidity APR Dashboard</h2>
+            <p>Live pool data for BG across Base DEXs. Fees shown are LP earnings from trades routed through each pool in the last 24 hours.</p>
+        </div>
+
+        <div class="apy-dashboard">
+            <div class="apy-header">
+                <span class="apy-col apy-sortable" data-sort="dex">DEX <span class="sort-arrow"></span></span>
+                <span class="apy-col apy-sortable" data-sort="pair">Pair <span class="sort-arrow"></span></span>
+                <span class="apy-col apy-sortable apy-sort-active" data-sort="liquidity">Liquidity <span class="sort-arrow">▼</span></span>
+                <span class="apy-col apy-sortable" data-sort="volume24h">24h Vol <span class="sort-arrow"></span></span>
+                <span class="apy-col apy-sortable" data-sort="apr24h">24h APR <span class="sort-arrow"></span></span>
+                <span class="apy-col apy-sortable" data-sort="fees24h">24h Fees <span class="sort-arrow"></span></span>
+                <span class="apy-col">Action</span>
+            </div>
+            <div id="apy-pools">
+                <div class="apy-loading">Loading pool data...</div>
+            </div>
+        </div>
+        
+        <p class="apy-disclaimer">Estimates based on live DEX data. Does not account for impermanent loss. Not financial advice.</p>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="scarcity">
+        <div class="section-header">
+            <h2 class="gold-text">Frequently Asked Questions</h2>
+            <p>Everything you need to know about BaseGold.</p>
+        </div>
+
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>How do I buy BaseGold?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>You can buy BaseGold on any of our supported DEXs including Uniswap, SushiSwap, and Aerodrome. You'll need a Web3 wallet (like MetaMask or Coinbase Wallet) with ETH on Base network. Simply connect your wallet, swap ETH for BG, and you're done!</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>What wallet do I need?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Any EVM-compatible wallet works with BaseGold. We recommend MetaMask, Coinbase Wallet, or Rainbow. Make sure to add the Base network to your wallet and bridge some ETH for gas fees.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>What makes BaseGold different from Bitcoin?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>BaseGold is the inverse of Bitcoin. While Bitcoin mines new tokens into circulation toward a 21 million cap, BaseGold burns tokens out of existence from a 10,000 supply. We're 2,100x scarcer than Bitcoin, with ~1 second transaction speeds (vs 15-30 minutes), near-zero fees (vs ~$5), and six burn mechanisms driving continuous deflation.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>Is the contract secure?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>BaseGold is built on OpenZeppelin's audited ERC-20 and ERC20Burnable standards with security review by Blockaid. All contracts are verified on BaseScan with full source code available. The architecture uses no administrative override on user funds — all operations execute trustlessly through the smart contracts.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>What is the burn mechanism?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>BaseGold operates six distinct burn mechanisms: voluntary holder burns, MineSwap DEX autonomous buyback-and-burn, mine plot purchases (0.10 BG per plot), in-game shop purchases (100% burned), Gold Vein referral burns (5% per activation), and Golden Council protocol burns. Together, these create constant deflationary pressure from every layer of the ecosystem.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    <span>How do I qualify for airdrops?</span>
+                    <span class="faq-toggle">+</span>
+                </div>
+                <div class="faq-answer">
+                    <p>Hold 1 BG or more in your wallet to qualify as a Golden Council member. Airdrop eligibility is weighted by a composite score derived from your on-chain mine plot metadata — including referrals made, BG burned, gold mined, BG held, and tournament performance. Seasonal airdrops reward active ecosystem participants.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Burn Section -->
+    <!-- Open Your Mine CTA Section -->
+    <section class="open-mine-section" style="padding: 4rem 2rem; text-align: center; background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(0,0,0,0.9));">
+        <div style="max-width: 700px; margin: 0 auto;">
+            <div style="margin-bottom: 1rem;"><svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="m14 12-8.5 8.5a2.12 2.12 0 1 1-3-3L11 9"/><path d="M15 13 9 7l4-4 6 6h3a8 8 0 0 1-7 7z"/></svg></div>
+            <h2 class="gold-text" style="font-size: 2.5rem; margin-bottom: 1rem; font-family: 'Cinzel', serif;">Get Started with BaseGold</h2>
+            <p style="color: #999; margin-bottom: 2rem; font-size: 1.1rem;">
+                Trade BG with near-zero fees and cashback rebates on MineSwap, or mint your NFT mine plot and compete in seasonal tournaments.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; align-items: center;">
+                <a href="https://mineswap.org" 
+                   target="_blank"
+                   style="display: inline-block; background: linear-gradient(135deg, #D4AF37, #B8960C); color: #000; font-weight: bold; padding: 1rem 2.5rem; border-radius: 12px; text-decoration: none; font-size: 1.15rem; transition: transform 0.3s, box-shadow 0.3s;"
+                   onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 30px rgba(212,175,55,0.5)';"
+                   onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg> Trade on MineSwap
+                </a>
+                <a href="https://mineswap.org/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" 
+                   target="_blank"
+                   style="display: inline-block; background: transparent; border: 2px solid #D4AF37; color: #D4AF37; font-weight: bold; padding: 1rem 2.5rem; border-radius: 12px; text-decoration: none; font-size: 1.15rem; transition: transform 0.3s, box-shadow 0.3s;"
+                   onmouseover="this.style.transform='scale(1.05)'; this.style.boxShadow='0 0 30px rgba(212,175,55,0.3)';"
+                   onmouseout="this.style.transform='scale(1)'; this.style.boxShadow='none';">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="m14 12-8.5 8.5a2.12 2.12 0 1 1-3-3L11 9"/><path d="M15 13 9 7l4-4 6 6h3a8 8 0 0 1-7 7z"/></svg> Start Mining
+                </a>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 2rem; margin-top: 1.5rem; color: #666; font-size: 0.9rem;">
+                <span>✓ Near-Zero Fees</span>
+                <span>✓ BG Rebates</span>
+                <span>✓ 7-Level Referrals</span>
+                <span>✓ Season 3 Live</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-brand">
+            <img src="logo.png" alt="BaseGold" class="footer-logo-img">
+            <div class="footer-logo gold-text">BASEGOLD</div>
+        </div>
+        <div class="social-links">
+            <a href="https://www.geckoterminal.com/base/pools/0x36b712A629095234F2196BbB000D1b96C12Ce78e" target="_blank" rel="dofollow">GeckoTerminal</a>
+            <a href="https://dexscreener.com/base/0x36b712A629095234F2196BbB000D1b96C12Ce78e" target="_blank">DexScreener</a>
+            <a href="https://basescan.org/address/0x36b712A629095234F2196BbB000D1b96C12Ce78e" target="_blank">BaseScan</a>
+            <a href="https://x.com/BaseGold_BG" target="_blank">Twitter</a>
+            <a href="https://t.me/+ZzMI6IXV_KFiNzkx" target="_blank">Telegram</a>
+        </div>
+        <div class="footer-legal">
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms of Service</a>
+            <a href="/disclaimer.html">Risk Disclaimer</a>
+        </div>
+        <p class="footer-disclaimer">
+            Disclaimer: This website is for informational purposes only and does not constitute financial advice. 
+            Cryptocurrency investments carry significant risk. Always do your own research.
+        </p>
+        <p class="footer-copyright">© 2026 BaseGold Foundation. All rights reserved.</p>
+    </footer>
+
+    <!-- Ethers.js for blockchain interaction -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.9.0/ethers.umd.min.js"></script>
+    
+    <script>
+        // Check if ethers loaded
+        if (typeof ethers === 'undefined') {
+            console.error('Ethers.js failed to load');
+        }
+        
+        // Contract details
+        const CONTRACT_ADDRESS = "0x36b712A629095234F2196BbB000D1b96C12Ce78e";
+        const INITIAL_SUPPLY = 10000;
+        
+        // Multiple RPC endpoints for reliability
+        const RPC_ENDPOINTS = [
+            "https://base.publicnode.com",
+            "https://mainnet.base.org",
+            "https://base-mainnet.public.blastapi.io"
+        ];
+        
+        // Minimal ERC-20 ABI for totalSupply
+        const ERC20_ABI = [
+            "function totalSupply() view returns (uint256)",
+            "function decimals() view returns (uint8)",
+            "function balanceOf(address) view returns (uint256)"
+        ];
+
+        // Known DEX pool addresses for BaseGold
+        const DEX_POOLS = [
+            "0x7cc79b882dfe590a81c447745d72be569e0b2a4b",  // Uniswap BG/WETH
+            "0x5e2b6a46ea72c6131d6cd5150eb11d3dd9c9ead2",  // SushiSwap BG/WETH
+            "0x3488578c260882f691563a33adf49dd340ad81d2",  // PancakeSwap BG/WETH
+            "0xb7c567f80b8ce7faf50a093edc8860558f376a39",  // Aerodrome BG/WETH
+            "0xf66c3a84be44eca21fa510f04fbd9bfe79da6d67",  // SwapBased BG/WETH
+            "0xc58aebcb9359ba2d437c0941a77690aa7e47636e",  // AlienBase BG/WETH
+            "0x79d4e0238774c1fdb4464279a4b847adeb38dd2c",  // DackieSwap BG/WETH
+            "0x4cc6a2cfce02e4e1afc3a96f4a3519c52e55581",  // MineSwap BG/WETH
+            "0x1305cc19bcfc5e07c7a0a4e0f0727cb7f1d4629f",  // MineSwap BG/USDC
+            "0xa896bbddd3c529e63a06b70d9e3dc56e05c2987a",  // MineSwap BG/cbBTC
+        ];
+
+        async function fetchDexLiquidity() {
+            for (const rpc of RPC_ENDPOINTS) {
+                try {
+                    const provider = new ethers.JsonRpcProvider(rpc);
+                    const contract = new ethers.Contract(CONTRACT_ADDRESS, ERC20_ABI, provider);
+                    
+                    // Query all pools in parallel
+                    const balancePromises = DEX_POOLS.map(async (poolAddress) => {
+                        try {
+                            return await contract.balanceOf(poolAddress);
+                        } catch (e) {
+                            return 0n;
+                        }
+                    });
+                    
+                    const balances = await Promise.all(balancePromises);
+                    const totalLiquidity = balances.reduce((sum, bal) => sum + BigInt(bal), 0n);
+                    
+                    // Format and display
+                    const liquidityFormatted = Number(ethers.formatEther(totalLiquidity));
+                    document.getElementById('dex-liquidity').textContent = liquidityFormatted.toLocaleString('en-US', {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2
+                    }) + ' BG';
+                    
+                    return; // Success, exit loop
+                    
+                } catch (error) {
+                    console.log('RPC failed for liquidity:', rpc, error.message);
+                    continue; // Try next RPC
+                }
+            }
+            
+            // All RPCs failed
+            document.getElementById('dex-liquidity').textContent = '---';
+        }
+
+        async function fetchTotalSupply() {
+            const DEAD_ADDRESS = '0x000000000000000000000000000000000000dEaD';
+            
+            for (const rpc of RPC_ENDPOINTS) {
+                try {
+                    const provider = new ethers.JsonRpcProvider(rpc);
+                    const contract = new ethers.Contract(CONTRACT_ADDRESS, ERC20_ABI, provider);
+                    
+                    const [totalSupplyRaw, decimals, contractBalanceRaw, deadBalanceRaw] = await Promise.all([
+                        contract.totalSupply(),
+                        contract.decimals(),
+                        contract.balanceOf(CONTRACT_ADDRESS), // Tokens stuck in contract
+                        contract.balanceOf(DEAD_ADDRESS) // Tokens sent to dead address (from InstantBurn)
+                    ]);
+                    
+                    const totalSupply = Number(ethers.formatUnits(totalSupplyRaw, decimals));
+                    const contractBalance = Number(ethers.formatUnits(contractBalanceRaw, decimals));
+                    const deadBalance = Number(ethers.formatUnits(deadBalanceRaw, decimals));
+                    
+                    // Burned = actual burns + tokens stuck in contract + tokens in dead address
+                    const actualBurned = INITIAL_SUPPLY - totalSupply;
+                    const totalBurned = actualBurned + contractBalance + deadBalance;
+                    
+                    // Effective circulating supply (excludes stuck tokens and dead address)
+                    const effectiveSupply = totalSupply - contractBalance - deadBalance;
+                    
+                    // Update the display
+                    const supplyElement = document.getElementById('total-supply');
+                    const burnedElement = document.getElementById('burned-amount');
+                    
+                    supplyElement.textContent = effectiveSupply.toLocaleString('en-US', {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 2
+                    });
+                    supplyElement.classList.add('updated');
+                    
+                    burnedElement.textContent = totalBurned.toLocaleString('en-US', {
+                        minimumFractionDigits: 0,
+                        maximumFractionDigits: 4
+                    });
+                    burnedElement.classList.add('updated');
+                    
+                    // Update the scarcity table too
+                    const tableSupply = document.getElementById('table-supply');
+                    const scarcityFactor = document.getElementById('scarcity-factor');
+                    const scarcityHero = document.getElementById('scarcity-hero');
+                    
+                    // Bitcoin has 21M supply, calculate scarcity multiplier based on effective supply
+                    const scarcity = Math.round(21000000 / effectiveSupply);
+                    const scarcityFormatted = scarcity.toLocaleString() + 'x';
+                    
+                    if (tableSupply) tableSupply.textContent = effectiveSupply.toLocaleString();
+                    if (scarcityFactor) scarcityFactor.textContent = scarcityFormatted;
+                    if (scarcityHero) scarcityHero.textContent = scarcityFormatted;
+                    
+                    return; // Success, exit loop
+                    
+                } catch (error) {
+                    console.log('RPC failed:', rpc, error.message);
+                    continue; // Try next RPC
+                }
+            }
+            
+            // All RPCs failed
+            console.error('All RPC endpoints failed for totalSupply');
+        }
+        // Wait for ethers.js to be fully loaded before initializing
+        function waitForEthers(callback) {
+            if (typeof ethers !== 'undefined' && ethers.JsonRpcProvider) {
+                callback();
+            } else {
+                setTimeout(() => waitForEthers(callback), 100);
+            }
+        }
+
+        // Initialize everything once ethers is ready
+        waitForEthers(function() {
+            fetchTotalSupply();
+            fetchDexLiquidity();
+            
+            // Refresh periodically
+            setInterval(fetchTotalSupply, 30000);
+            setInterval(fetchDexLiquidity, 60000);
+        });
+
+        // ========== LIVE PRICE TICKER ==========
+        async function fetchPriceData() {
+            try {
+                const response = await fetch('https://api.dexscreener.com/latest/dex/tokens/0x36b712A629095234F2196BbB000D1b96C12Ce78e');
+                const data = await response.json();
+                
+                if (data.pairs && data.pairs.length > 0) {
+                    // Get the main pair (highest liquidity on Base)
+                    const basePairs = data.pairs.filter(p => p.chainId === 'base');
+                    const mainPair = basePairs.sort((a, b) => (b.liquidity?.usd || 0) - (a.liquidity?.usd || 0))[0];
+                    
+                    if (mainPair) {
+                        const price = parseFloat(mainPair.priceUsd) || 0;
+                        const priceChange = parseFloat(mainPair.priceChange?.h24) || 0;
+                        const volume = mainPair.volume?.h24 || 0;
+                        const fdv = mainPair.fdv || 0;
+                        
+                        // Update ticker
+                        document.getElementById('ticker-price').textContent = '$' + price.toFixed(4);
+                        document.getElementById('ticker-volume').textContent = '$' + formatNumber(volume);
+                        document.getElementById('ticker-mcap').textContent = '$' + formatNumber(fdv);
+                        
+                        // Update 24h transactions
+                        let totalTxns = 0;
+                        basePairs.forEach(p => {
+                            totalTxns += (p.txns?.h24?.buys || 0) + (p.txns?.h24?.sells || 0);
+                        });
+                        
+                        // Update ticker txns
+                        const tickerTxns = document.getElementById('ticker-txns');
+                        if (tickerTxns) tickerTxns.textContent = totalTxns.toLocaleString();
+                        
+                        // Update price change with color
+                        const changeEl = document.getElementById('ticker-change');
+                        changeEl.textContent = (priceChange >= 0 ? '+' : '') + priceChange.toFixed(2) + '%';
+                        changeEl.className = 'ticker-change ' + (priceChange >= 0 ? 'positive' : 'negative');
+                        
+                        // Update sticky CTA price
+                        document.getElementById('sticky-price').textContent = '@ $' + price.toFixed(4);
+                        
+                        // Update community section txns
+                        const communityTxns = document.getElementById('community-txns');
+                        if (communityTxns) {
+                            communityTxns.textContent = totalTxns.toLocaleString();
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching price data:', error);
+            }
+        }
+
+        // ========== STICKY CTA SCROLL BEHAVIOR ==========
+        let lastScrollY = window.scrollY;
+        const stickyCta = document.getElementById('sticky-cta');
+        
+        function handleScroll() {
+            const currentScrollY = window.scrollY;
+            const heroHeight = document.querySelector('.hero').offsetHeight;
+            
+            // Show sticky CTA after scrolling past hero section
+            if (currentScrollY > heroHeight * 0.8) {
+                stickyCta.classList.add('visible');
+            } else {
+                stickyCta.classList.remove('visible');
+            }
+            
+            lastScrollY = currentScrollY;
+        }
+        
+        window.addEventListener('scroll', handleScroll, { passive: true });
+
+        // APR Dashboard - Fetch pool data from DexScreener
+        const DEX_LINKS = {
+            'mineswap': 'https://mineswap.org/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39',
+            'uniswap': 'https://app.uniswap.org/positions/create/v2?currencyA=ETH&currencyB=0x36b712A629095234F2196BbB000D1b96C12Ce78e&chain=base',
+            'sushiswap': 'https://www.sushi.com/base/pool/v2/add?token0=NATIVE&token1=0x36b712A629095234F2196BbB000D1b96C12Ce78e',
+            'aerodrome': 'https://aerodrome.finance/deposit?token0=eth&token1=0x36b712A629095234F2196BbB000D1b96C12Ce78e',
+            'pancakeswap': 'https://pancakeswap.finance/liquidity?chain=base',
+            'alienbase': 'https://app.alienbase.xyz/add/ETH/0x36b712A629095234F2196BbB000D1b96C12Ce78e',
+            'swapbased': 'https://swapbased.finance/#/add/ETH/0x36b712A629095234F2196BbB000D1b96C12Ce78e',
+            'dackieswap': 'https://www.dackieswap.xyz/add?chain=base'
+        };
+
+        // Map DexScreener dexIds that are raw addresses to friendly names
+        const DEX_NAME_OVERRIDES = {
+            '0xb0c2d8a877a5b48607d9c89b6ad761f36bc79c88': 'MineSwap'
+        };
+
+        async function fetchAPRData() {
+            try {
+                // BG token query returns all BG pools across all DEXs (including MineSwap)
+                const response = await fetch('https://api.dexscreener.com/latest/dex/tokens/0x36b712A629095234F2196BbB000D1b96C12Ce78e');
+                const data = await response.json();
+                
+                const allPairs = [];
+                const seenAddrs = new Set();
+                
+                // Add all BG pools from DexScreener
+                if (data?.pairs) {
+                    data.pairs.filter(p => p.chainId === 'base').forEach(p => {
+                        const addr = p.pairAddress?.toLowerCase();
+                        if (addr && !seenAddrs.has(addr)) {
+                            seenAddrs.add(addr);
+                            allPairs.push(p);
+                        }
+                    });
+                }
+
+                if (allPairs.length > 0) {
+                    aprPoolsData = allPairs
+                        .filter(p => !p.dexId?.toLowerCase().includes('baseswap'))
+                        .map(p => {
+                            const liquidity = p.liquidity?.usd || 0;
+                            const volume24h = p.volume?.h24 || 0;
+                            const volumeH6 = p.volume?.h6 || 0;
+                            
+                            // Fee rate: MineSwap LPs get 0.15% (half of 0.3%), others get full 0.3%
+                            const isMineSwap = DEX_NAME_OVERRIDES[p.dexId?.toLowerCase()] === 'MineSwap';
+                            const feeRate = isMineSwap ? 0.0015 : 0.003;
+                            
+                            // 24h APR: simple annualization (daily fees × 365 / liquidity)
+                            const fees24h = volume24h * feeRate;
+                            const apr24h = liquidity > 0 ? (fees24h * 365 / liquidity) * 100 : 0;
+                            
+                            return {
+                                dex: DEX_NAME_OVERRIDES[p.dexId?.toLowerCase()] || p.dexId?.charAt(0).toUpperCase() + p.dexId?.slice(1).replace('_', ' ') || 'Unknown',
+                                pair: (p.baseToken?.symbol || '?') + '/' + (p.quoteToken?.symbol || '?'),
+                                liquidity,
+                                volume24h,
+                                apr24h,
+                                fees24h,
+                                url: p.url,
+                                isMineSwap
+                            };
+                        })
+                        .filter(p => p.liquidity > 5); // Filter dust pools
+                    
+                    sortAndRenderPools();
+                } else {
+                    document.getElementById('apy-pools').innerHTML = '<div class="apy-loading">No pools found</div>';
+                }
+            } catch (error) {
+                console.error('Error fetching APR data:', error);
+                document.getElementById('apy-pools').innerHTML = '<div class="apy-loading">Unable to load pool data</div>';
+            }
+        }
+
+        // Sort state
+        let aprPoolsData = [];
+        let aprSortKey = 'liquidity';
+        let aprSortDesc = true; // true = descending (highest first)
+
+        function sortAndRenderPools() {
+            if (!aprPoolsData.length) return;
+            
+            const sorted = [...aprPoolsData].sort((a, b) => {
+                let valA = a[aprSortKey];
+                let valB = b[aprSortKey];
+                // String columns sort alphabetically
+                if (typeof valA === 'string') {
+                    valA = valA.toLowerCase();
+                    valB = valB.toLowerCase();
+                    return aprSortDesc ? valB.localeCompare(valA) : valA.localeCompare(valB);
+                }
+                return aprSortDesc ? valB - valA : valA - valB;
+            });
+            
+            renderAPRDashboard(sorted);
+            updateSortHeaders();
+        }
+
+        function updateSortHeaders() {
+            document.querySelectorAll('.apy-sortable').forEach(el => {
+                const key = el.dataset.sort;
+                const arrow = el.querySelector('.sort-arrow');
+                if (key === aprSortKey) {
+                    el.classList.add('apy-sort-active');
+                    arrow.textContent = aprSortDesc ? '▼' : '▲';
+                } else {
+                    el.classList.remove('apy-sort-active');
+                    arrow.textContent = '';
+                }
+            });
+        }
+
+        // Attach click handlers to sortable headers
+        document.querySelectorAll('.apy-sortable').forEach(el => {
+            el.addEventListener('click', () => {
+                const key = el.dataset.sort;
+                if (aprSortKey === key) {
+                    aprSortDesc = !aprSortDesc; // Toggle direction
+                } else {
+                    aprSortKey = key;
+                    // Default: numbers descending, strings ascending
+                    aprSortDesc = (key !== 'dex' && key !== 'pair');
+                }
+                sortAndRenderPools();
+            });
+        });
+
+        function renderAPRDashboard(pools) {
+            const container = document.getElementById('apy-pools');
+            
+            if (pools.length === 0) {
+                container.innerHTML = '<div class="apy-loading">No pools found</div>';
+                return;
+            }
+
+            container.innerHTML = pools.map(pool => {
+                const apr24Class = pool.apr24h > 100 ? 'apy-high' : pool.apr24h > 20 ? 'apy-medium' : 'apy-low';
+                const dexKey = pool.dex.toLowerCase().replace(/[\s_-]/g, '');
+                const addLink = DEX_LINKS[dexKey] || DEX_LINKS[pool.dex.toLowerCase()] || `https://dexscreener.com/base/${pool.dex.toLowerCase()}`;
+                const displayName = pool.dex.charAt(0).toUpperCase() + pool.dex.slice(1).replace('_v2', '').replace('_', ' ');
+                const mineswapBadge = pool.isMineSwap ? ' <span style="font-size:0.65rem;color:#D4AF37;vertical-align:middle;">⛏</span>' : '';
+                const feesDisplay = pool.fees24h >= 0.01
+                    ? '$' + pool.fees24h.toFixed(2)
+                    : '$' + pool.fees24h.toFixed(4);
+                
+                return `
+                    <div class="apy-row">
+                        <span class="apy-col apy-dex">${displayName}${mineswapBadge}</span>
+                        <span class="apy-col apy-value" style="color: var(--gold); font-weight: 500;">${pool.pair}</span>
+                        <span class="apy-col apy-value">$${formatNumber(pool.liquidity)}</span>
+                        <span class="apy-col apy-value">$${formatNumber(pool.volume24h)}</span>
+                        <span class="apy-col apy-percent ${apr24Class}">${pool.apr24h.toFixed(1)}%</span>
+                        <span class="apy-col apy-value">${feesDisplay}</span>
+                        <span class="apy-col"><a href="${addLink}" target="_blank" class="apy-add-btn">Add LP</a></span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(2) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(2) + 'K';
+            return num.toFixed(2);
+        }
+
+        // Fetch APR data on load
+        fetchAPRData();
+        
+        // Refresh APR data every 60 seconds
+        setInterval(fetchAPRData, 60000);
+
+        // Initialize price ticker (must be after formatNumber is defined)
+        fetchPriceData();
+        setInterval(fetchPriceData, 30000); // Refresh every 30 seconds
+
+        function copyContract() {
+            const address = "0x36b712A629095234F2196BbB000D1b96C12Ce78e";
+            navigator.clipboard.writeText(address).then(() => {
+                document.getElementById('copy-hint').textContent = "✓ Copied to clipboard!";
+                setTimeout(() => {
+                    document.getElementById('copy-hint').textContent = "Click address to copy";
+                }, 2000);
+            });
+        }
+
+        // Smooth scroll for nav links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Mobile Menu Toggle
+        function toggleMenu() {
+            const hamburger = document.getElementById('hamburger');
+            const navLinks = document.getElementById('nav-links');
+            hamburger.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        }
+
+        // Close menu when clicking a link
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                document.getElementById('hamburger').classList.remove('active');
+                document.getElementById('nav-links').classList.remove('active');
+            });
+        });
+
+        // FAQ Toggle Function
+        function toggleFaq(element) {
+            const faqItem = element.parentElement;
+            const isActive = faqItem.classList.contains('active');
+            
+            // Close all other FAQ items
+            document.querySelectorAll('.faq-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Toggle current item
+            if (!isActive) {
+                faqItem.classList.add('active');
+            }
+        }
+
+        // Generate Global Gold Particles
+        function createGlobalParticles() {
+            const container = document.getElementById('global-particles');
+            const particleCount = window.innerWidth < 768 ? 15 : 30;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'global-particle';
+                
+                const size = Math.random() * 4 + 2;
+                const left = Math.random() * 100;
+                const duration = Math.random() * 20 + 15;
+                const delay = Math.random() * 20;
+                
+                particle.style.cssText = `
+                    width: ${size}px;
+                    height: ${size}px;
+                    left: ${left}%;
+                    animation-duration: ${duration}s;
+                    animation-delay: ${delay}s;
+                `;
+                
+                container.appendChild(particle);
+            }
+        }
+        
+        createGlobalParticles();
+    </script>
+</body>
+</html>
