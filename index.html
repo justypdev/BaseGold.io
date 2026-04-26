@@ -2874,55 +2874,90 @@
             "function balanceOf(address) view returns (uint256)"
         ];
 
-        // Known DEX pool addresses for BaseGold
+        // Known DEX pool addresses for BaseGold (RPC fallback only — DexScreener is primary)
+        // Standard 20-byte pool addresses we can balanceOf() on. V4 pools that only have a
+        // 32-byte poolId (held inside the PoolManager singleton) are intentionally omitted —
+        // those get picked up via the DexScreener primary path.
         const DEX_POOLS = [
-            "0x7cc79b882dfe590a81c447745d72be569e0b2a4b",  // Uniswap BG/WETH
-            "0x5e2b6a46ea72c6131d6cd5150eb11d3dd9c9ead2",  // SushiSwap BG/WETH
-            "0x3488578c260882f691563a33adf49dd340ad81d2",  // PancakeSwap BG/WETH
-            "0xb7c567f80b8ce7faf50a093edc8860558f376a39",  // Aerodrome BG/WETH
+            "0x4cC6bc0a0244ffac5f239a9ac5b8227078575581",  // Uniswap v4 BG/WETH (largest)
+            "0x7Cc79b882dfe590a81c447745d72be569e0b2a4b",  // Uniswap v2 BG/WETH
+            "0x5E2b6a46ea72c6131d6cd5150eb11d3dd9c9ead2",  // BG/WETH (InstantBurn target)
+            "0xbDd5ec6263f92278ea5553731b22a2db0453cceb",  // SushiSwap BG/WETH
+            "0xB7c567f80b8ce7faf50a093edc8860558f376a39",  // Aerodrome BG/WETH
             "0xf66c3a84be44eca21fa510f04fbd9bfe79da6d67",  // SwapBased BG/WETH
-            "0xc58aebcb9359ba2d437c0941a77690aa7e47636e",  // AlienBase BG/WETH
-            "0x79d4e0238774c1fdb4464279a4b847adeb38dd2c",  // DackieSwap BG/WETH
-            "0x4cc6a2cfce02e4e1afc3a96f4a3519c52e55581",  // MineSwap BG/WETH
-            "0x1305cc19bcfc5e07c7a0a4e0f0727cb7f1d4629f",  // MineSwap BG/USDC
-            "0xa896bbddd3c529e63a06b70d9e3dc56e05c2987a",  // MineSwap BG/cbBTC
+            "0xc58aebcb9359ba2d437c0941a77690aa7e47636e",  // AlienBase v2 BG/WETH
+            "0x79d4e0238774c1fdb4464279a4b847adeb38dd2c",  // DackieSwap v2 BG/WETH
+            "0x1305aca59b778a347b9baa2c9174454fad5e629f",  // BG/USDC
+            "0x949178ca9c72c6043e24cfa4b08b8dc6549adc73",  // BG/USDT
+            "0xD9A8ff384fc19b135d43e22e3a22d5fbb2512bbc",  // BG/AERO
+            "0xb2086fe3898560e764a0dcf4b347f55c93f09b22",  // cbDOGE/BG
+            "0x950d0ef548066cb80004d99812355574e9040425",  // cbXRP/BG
         ];
 
-        async function fetchDexLiquidity() {
+        // Render BG-side aggregate. Separate from the data-source so we can call it from
+        // either the DexScreener path (preferred) or the RPC fallback.
+        function renderDexLiquidity(bgUnits) {
+            const el = document.getElementById('dex-liquidity');
+            if (!el) return;
+            if (!Number.isFinite(bgUnits) || bgUnits <= 0) {
+                el.textContent = '---';
+                return;
+            }
+            el.textContent = bgUnits.toLocaleString('en-US', {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2
+            }) + ' BG';
+        }
+
+        // Primary path: aggregate BG-side liquidity from DexScreener across ALL pairs on Base
+        // (auto-discovers new pools, including V4 poolIds the on-chain method can't reach).
+        async function fetchDexLiquidityFromDexScreener() {
+            const response = await fetch('https://api.dexscreener.com/latest/dex/tokens/' + CONTRACT_ADDRESS);
+            if (!response.ok) throw new Error('DexScreener HTTP ' + response.status);
+            const data = await response.json();
+            const pairs = (data.pairs || []).filter(p => p.chainId === 'base');
+            if (pairs.length === 0) throw new Error('No Base pairs returned');
+
+            const bgAddr = CONTRACT_ADDRESS.toLowerCase();
+            let bgTotal = 0;
+            for (const p of pairs) {
+                const liq = p.liquidity || {};
+                const baseIsBG = (p.baseToken?.address || '').toLowerCase() === bgAddr;
+                const side = baseIsBG ? liq.base : liq.quote;
+                if (typeof side === 'number' && Number.isFinite(side)) bgTotal += side;
+            }
+            renderDexLiquidity(bgTotal);
+        }
+
+        // Fallback: sum balanceOf() across all known V2/V3 pool addresses via RPC.
+        async function fetchDexLiquidityFromChain() {
             for (const rpc of RPC_ENDPOINTS) {
                 try {
                     const provider = new ethers.JsonRpcProvider(rpc);
                     const contract = new ethers.Contract(CONTRACT_ADDRESS, ERC20_ABI, provider);
-                    
-                    // Query all pools in parallel
-                    const balancePromises = DEX_POOLS.map(async (poolAddress) => {
-                        try {
-                            return await contract.balanceOf(poolAddress);
-                        } catch (e) {
-                            return 0n;
-                        }
-                    });
-                    
-                    const balances = await Promise.all(balancePromises);
-                    const totalLiquidity = balances.reduce((sum, bal) => sum + BigInt(bal), 0n);
-                    
-                    // Format and display
-                    const liquidityFormatted = Number(ethers.formatEther(totalLiquidity));
-                    document.getElementById('dex-liquidity').textContent = liquidityFormatted.toLocaleString('en-US', {
-                        minimumFractionDigits: 0,
-                        maximumFractionDigits: 2
-                    }) + ' BG';
-                    
-                    return; // Success, exit loop
-                    
+
+                    const balances = await Promise.all(DEX_POOLS.map(async (poolAddress) => {
+                        try { return await contract.balanceOf(poolAddress); }
+                        catch (e) { return 0n; }
+                    }));
+                    const total = balances.reduce((sum, bal) => sum + BigInt(bal), 0n);
+                    renderDexLiquidity(Number(ethers.formatEther(total)));
+                    return;
                 } catch (error) {
                     console.log('RPC failed for liquidity:', rpc, error.message);
-                    continue; // Try next RPC
+                    continue;
                 }
             }
-            
-            // All RPCs failed
-            document.getElementById('dex-liquidity').textContent = '---';
+            renderDexLiquidity(0);
+        }
+
+        async function fetchDexLiquidity() {
+            try {
+                await fetchDexLiquidityFromDexScreener();
+            } catch (e) {
+                console.log('DexScreener liquidity fetch failed, falling back to RPC:', e.message);
+                await fetchDexLiquidityFromChain();
+            }
         }
 
         async function fetchTotalSupply() {
@@ -3024,7 +3059,9 @@
                     if (mainPair) {
                         const price = parseFloat(mainPair.priceUsd) || 0;
                         const priceChange = parseFloat(mainPair.priceChange?.h24) || 0;
-                        const volume = mainPair.volume?.h24 || 0;
+                        // Aggregate 24h volume across ALL Base pairs (not just the main pair)
+                        let volume = 0;
+                        basePairs.forEach(p => { volume += (p.volume?.h24 || 0); });
                         const fdv = mainPair.fdv || 0;
                         
                         // Update ticker
