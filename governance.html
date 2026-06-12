@@ -1,13 +1,38 @@
 <!DOCTYPE html>
+<!--
+    ================================================================
+    DRAFT — DO NOT PUBLISH YET.
+    REQUIRED BEFORE UPLOAD: this page (and all Golden Council copy)
+    must go through JUSTIN + ATTORNEY REVIEW before publishing.
+
+    1. Every claim marked [CONFIRM-WITH-JUSTIN] below is a perk that
+       is NOT currently advertised anywhere on the site or in the
+       whitepaper. Confirm each one is real or DELETE it before
+       this page goes live.
+    2. This page replaced the former "Golden Council DAO" voting
+       page. The Golden Council is now a holder BENEFITS tier only.
+       No voting, governance, Snapshot, proposal, or treasury-
+       decision content may be re-added to this page.
+    3. FLAG FOR JUSTIN/ATTORNEY: the legacy Snapshot space
+       (snapshot.box/#/s:basegold_bg) still exists off-site with an
+       active proposal ("Refund Bobby's 60 BG Burn"). Removing the
+       links here does not remove the Snapshot space itself — that
+       must be handled separately.
+    4. Filename kept as governance.html because external links may
+       point at it. Update nav labels on index.html, games.html,
+       and buy.html to match the new "Golden Council" framing.
+    ================================================================
+-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <!-- Security Headers (CSP) - Mitigates XSS and data injection attacks -->
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' data: blob: https:; font-src 'self' https://fonts.gstatic.com; connect-src 'self' https://mainnet.base.org https://base.llamarpc.com https://api.coingecko.com https://*.basegold.io; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests;">
-    
-    <title>BaseGold Governance - Golden Council DAO</title>
+
+    <title>Golden Council Benefits - BaseGold's Holder Recognition Tier</title>
+    <meta name="description" content="The Golden Council is BaseGold's holder-recognition and benefits tier. Hold 1 BG to join and qualify for seasonal airdrop eligibility, tournament recognition, and community status. The Council is a benefits tier — it does not control protocol parameters, fees, or treasury.">
     <link rel="icon" type="image/png" href="logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -81,7 +106,7 @@
             height: 100%;
             pointer-events: none;
             z-index: 0;
-            background: 
+            background:
                 radial-gradient(ellipse at 20% 20%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
                 radial-gradient(ellipse at 80% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
                 radial-gradient(ellipse at 50% 50%, rgba(212, 175, 55, 0.02) 0%, transparent 70%);
@@ -160,7 +185,7 @@
             margin-bottom: 2rem;
         }
 
-        .vote-btn {
+        .hero-btn {
             display: inline-block;
             padding: 1rem 3rem;
             background: linear-gradient(135deg, var(--gold-dark), var(--gold));
@@ -172,7 +197,7 @@
             transition: all 0.3s;
         }
 
-        .vote-btn:hover {
+        .hero-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
         }
@@ -211,7 +236,7 @@
             line-height: 1.5;
         }
 
-        /* How It Works */
+        /* Sections */
         .section {
             margin-bottom: 3rem;
         }
@@ -263,7 +288,7 @@
             font-size: 0.9rem;
         }
 
-        /* Requirements Box */
+        /* Membership Box */
         .requirements {
             background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(212, 175, 55, 0.02));
             border: 1px solid rgba(212, 175, 55, 0.2);
@@ -292,79 +317,37 @@
             color: #4ade80;
         }
 
-        /* Active Proposals */
-        .proposals-section {
+        /* Benefits-Tier Disclaimer */
+        .disclaimer-box {
+            background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
             margin-bottom: 3rem;
         }
 
-        .proposal-card {
-            background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1rem;
-            transition: all 0.3s;
-        }
-
-        .proposal-card:hover {
-            border-color: rgba(212, 175, 55, 0.3);
-        }
-
-        .proposal-status {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            background: rgba(74, 222, 128, 0.2);
-            color: #4ade80;
-            border-radius: 20px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            margin-bottom: 0.75rem;
-        }
-
-        .proposal-status.closed {
-            background: rgba(248, 113, 113, 0.2);
-            color: #f87171;
-        }
-
-        .proposal-status.pending {
-            background: rgba(251, 191, 36, 0.2);
-            color: #fbbf24;
-        }
-
-        .proposal-title {
+        .disclaimer-box h3 {
             font-family: 'Cinzel', serif;
-            font-size: 1.25rem;
-            color: var(--white);
-            margin-bottom: 0.5rem;
-        }
-
-        .proposal-description {
-            color: var(--gray);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-            line-height: 1.5;
-        }
-
-        .proposal-link {
-            display: inline-block;
             color: var(--gold);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 0.9rem;
+            margin-bottom: 1rem;
         }
 
-        .proposal-link:hover {
-            text-decoration: underline;
-        }
-
-        .no-proposals {
-            text-align: center;
+        .disclaimer-box p {
             color: var(--gray);
-            padding: 2rem;
-            background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 12px;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .disclaimer-box p strong {
+            color: var(--white);
+        }
+
+        /* Draft-review flag for unverified perk claims */
+        .confirm-flag {
+            color: #fbbf24;
+            font-weight: 700;
+            font-size: 0.8em;
         }
 
         /* CTA */
@@ -466,56 +449,71 @@
 
     <main class="main">
         <div class="hero">
-            <h1>🏛️ Golden Council DAO</h1>
-            <p class="hero-subtitle">Decentralized governance by BG holders</p>
-            <a href="https://snapshot.box/#/s:basegold_bg" target="_blank" class="vote-btn">🗳️ Vote on Snapshot</a>
+            <h1>👑 The Golden Council</h1>
+            <p class="hero-subtitle">BaseGold's holder-recognition and benefits tier</p>
+            <a href="https://app.uniswap.org/swap?chain=base&outputCurrency=0x36b712A629095234F2196BbB000D1b96C12Ce78e" target="_blank" class="hero-btn">Buy BG on Uniswap</a>
         </div>
 
         <div class="info-grid">
             <div class="info-card">
-                <div class="info-card-icon">🗳️</div>
-                <h3>Gasless Voting</h3>
-                <p>Vote on proposals without paying gas fees. Your vote is verified on-chain.</p>
-            </div>
-            <div class="info-card">
-                <div class="info-card-icon">⚖️</div>
-                <h3>1 BG = 1 Vote</h3>
-                <p>Your voting power equals your BG holdings. More BG = more influence.</p>
-            </div>
-            <div class="info-card">
                 <div class="info-card-icon">👑</div>
-                <h3>Community Owned</h3>
-                <p>The Golden Council decides the future of BaseGold together.</p>
+                <h3>Hold 1 BG to Join</h3>
+                <p>Hold just 1 BG in your wallet to be recognized as a Golden Council member. No applications, no registration — membership comes with holding.</p>
+            </div>
+            <div class="info-card">
+                <div class="info-card-icon">🎁</div>
+                <h3>Real Member Perks</h3>
+                <p>Seasonal airdrop eligibility, tournament recognition, and community status for BaseGold's most committed holders.</p>
+            </div>
+            <div class="info-card">
+                <div class="info-card-icon">🛡️</div>
+                <h3>Benefits, Not Control</h3>
+                <p>The Council is a benefits tier — it does not control protocol parameters, fees, or treasury.</p>
             </div>
         </div>
 
         <div class="requirements">
-            <h3>Voting Requirements</h3>
+            <h3>Membership</h3>
             <div class="requirement-item">
-                <span>✓</span> Hold BG tokens in your wallet (1 BG = 1 vote)
+                <span>✓</span> Hold 1 BG or more in your wallet — that's the only requirement
             </div>
             <div class="requirement-item">
-                <span>✓</span> Connect wallet to Snapshot
-            </div>
-            <div class="requirement-item">
-                <span>✓</span> Vote during the active voting period
+                <span>✓</span> Membership is automatic — no registration, no applications, no fees
             </div>
         </div>
 
-        <div class="section proposals-section">
-            <h2>📋 Active Proposals</h2>
-            
-            <div class="proposal-card">
-                <span class="proposal-status">Active</span>
-                <h3 class="proposal-title">Refund Bobby's 60 BG Burn</h3>
-                <p class="proposal-description">
-                    Bobby accidentally sent 60 BG to the contract address, effectively burning them. 
-                    Should the DAO treasury refund Bobby 60 BG?
-                </p>
-                <a href="https://snapshot.box/#/s:basegold_bg" target="_blank" class="proposal-link">Vote Now →</a>
+        <div class="section">
+            <h2>🎁 Member Benefits</h2>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">🪂</div>
+                    <div class="step-content">
+                        <h4>Seasonal Airdrop Eligibility</h4>
+                        <p>Council members qualify for seasonal airdrops. Eligibility is weighted by a composite score derived from your on-chain mine plot metadata — referrals made, BG burned, gold mined, BG held, and tournament performance — so active ecosystem participants get priority for ecosystem drops.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">🏆</div>
+                    <div class="step-content">
+                        <h4>Tournament Recognition</h4>
+                        <p>Golden Council recognition is built into The Gold Mine: top tournament performers earn BG prizes along with a celebrated place among Council members.</p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">⭐</div>
+                    <div class="step-content">
+                        <h4>Early Access to New Features <span class="confirm-flag">[CONFIRM-WITH-JUSTIN]</span></h4>
+                        <p>Members get early access to new ecosystem features ahead of public release. <span class="confirm-flag">[CONFIRM-WITH-JUSTIN — early access is not currently advertised anywhere on the site or in the whitepaper; confirm this perk is actually delivered before publishing, or delete this item.]</span></p>
+                    </div>
+                </div>
+                <div class="step">
+                    <div class="step-number">💬</div>
+                    <div class="step-content">
+                        <h4>Holder-Only Community Channels <span class="confirm-flag">[CONFIRM-WITH-JUSTIN]</span></h4>
+                        <p>Members get access to holder-only community channels. <span class="confirm-flag">[CONFIRM-WITH-JUSTIN — the Telegram links currently on the site are open public invites, not token-gated; confirm a holder-only channel actually exists before publishing, or delete this item.]</span></p>
+                    </div>
+                </div>
             </div>
-
-            <!-- Add more proposals as needed -->
         </div>
 
         <div class="section">
@@ -525,45 +523,43 @@
                     <div class="step-number">1</div>
                     <div class="step-content">
                         <h4>Hold BG Tokens</h4>
-                        <p>Your voting power equals your BG balance. 1 BG = 1 vote.</p>
+                        <p>Hold at least 1 BG in your wallet on Base.</p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">2</div>
                     <div class="step-content">
-                        <h4>Connect to Snapshot</h4>
-                        <p>Visit our Snapshot page and connect the wallet holding your BG tokens.</p>
+                        <h4>You're a Member</h4>
+                        <p>Recognition is automatic. Holding 1 BG makes you part of the Golden Council — no sign-up needed.</p>
                     </div>
                 </div>
                 <div class="step">
                     <div class="step-number">3</div>
                     <div class="step-content">
-                        <h4>Cast Your Vote</h4>
-                        <p>Review active proposals and vote Yes or No. Voting is gasless and free!</p>
-                    </div>
-                </div>
-                <div class="step">
-                    <div class="step-number">4</div>
-                    <div class="step-content">
-                        <h4>Results Executed</h4>
-                        <p>When voting ends, the community decision is executed by the team.</p>
+                        <h4>Enjoy the Benefits</h4>
+                        <p>Stay active in the ecosystem — referrals, burns, mining, and tournaments all feed the composite score that weights your seasonal airdrop eligibility.</p>
                     </div>
                 </div>
             </div>
         </div>
 
+        <div class="disclaimer-box">
+            <h3>About the Golden Council</h3>
+            <p>The Golden Council is a recognition and rewards program for BG holders. <strong>The Council is a benefits tier — it does not control protocol parameters, fees, or treasury.</strong></p>
+        </div>
+
         <div class="cta-section">
             <h2>Join the Golden Council</h2>
-            <p>Own BG tokens to participate in shaping the future of BaseGold.</p>
+            <p>Hold 1 BG to become part of BaseGold's holder-recognition tier.</p>
             <div class="cta-buttons">
                 <a href="https://app.uniswap.org/swap?chain=base&outputCurrency=0x36b712A629095234F2196BbB000D1b96C12Ce78e" target="_blank" class="cta-btn primary">Buy BG on Uniswap</a>
-                <a href="https://snapshot.box/#/s:basegold_bg" target="_blank" class="cta-btn secondary">View All Proposals</a>
+                <a href="index.html" class="cta-btn secondary">Explore the Ecosystem</a>
             </div>
         </div>
     </main>
 
     <footer class="footer">
-        <p>BaseGold Governance powered by <a href="https://snapshot.org" target="_blank">Snapshot</a></p>
+        <p>The Golden Council is BaseGold's holder benefits tier. <a href="index.html">Return to BaseGold.io</a></p>
     </footer>
 
     <script>
@@ -571,16 +567,16 @@
         function createGlobalParticles() {
             const container = document.getElementById('global-particles');
             const particleCount = window.innerWidth < 768 ? 15 : 30;
-            
+
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'global-particle';
-                
+
                 const size = Math.random() * 4 + 2;
                 const left = Math.random() * 100;
                 const duration = Math.random() * 20 + 15;
                 const delay = Math.random() * 20;
-                
+
                 particle.style.cssText = `
                     width: ${size}px;
                     height: ${size}px;
@@ -588,11 +584,11 @@
                     animation-duration: ${duration}s;
                     animation-delay: ${delay}s;
                 `;
-                
+
                 container.appendChild(particle);
             }
         }
-        
+
         createGlobalParticles();
     </script>
 </body>

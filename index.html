@@ -1,4 +1,27 @@
 <!DOCTYPE html>
+<!--
+    ============================================================================
+    DRAFT — DO NOT PUBLISH WITHOUT REVIEW
+    This revision reframes all Golden Council copy from governance/voting to a
+    holder benefits/recognition tier (per the legal restructure), updates the
+    burn-mechanism count to five, and updates the roadmap and whitepaper link.
+    FINAL COPY MUST BE REVIEWED AND APPROVED BY JUSTIN AND THE ATTORNEY
+    (Golden Council restructure engagement) BEFORE THIS FILE IS PUBLISHED.
+    Perks marked [CONFIRM-WITH-JUSTIN] are not currently advertised anywhere
+    on the site/docs — confirm they are real or remove them before publish.
+    ----------------------------------------------------------------------------
+    UPLOAD CHECKLIST — WHITEPAPER PDF (REQUIRED AT PUBLISH):
+    Every whitepaper link sitewide (this page incl. the "Download Whitepaper
+    v2.1 (PDF)" button, games.html, and all blog footers) points at
+    whitepaper.pdf, which is STILL THE OLD v2.0 FILE containing the removed
+    Golden Council governance copy. After Justin + attorney sign-off, export
+    the approved whitepaper-v2.1.html to PDF (draft banner and all
+    [CONFIRM-WITH-JUSTIN] markers removed) and OVERWRITE whitepaper.pdf with
+    it in the same upload. Do NOT publish this file while whitepaper.pdf is
+    still the v2.0 binary — the v2.1-labeled button would serve the old
+    governance-framing PDF.
+    ============================================================================
+-->
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -10,14 +33,14 @@
     <!-- See vercel.json or _headers file for full header configuration -->
     
     <title>BaseGold (BG) — The Store of Value for MineSwap.org</title>
-    <meta name="description" content="BaseGold is a deflationary digital asset with only 10,000 tokens — 2,100x scarcer than Bitcoin. Six burn mechanisms, MineSwap DEX, NFT mine plots, and 7-level referrals. Built on Base Network.">
+    <meta name="description" content="BaseGold is a deflationary digital asset with only 10,000 tokens — 2,100x scarcer than Bitcoin. Five burn mechanisms, MineSwap DEX, NFT mine plots, and 7-level referrals. Built on Base Network.">
     <link rel="canonical" href="https://basegold.io/">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://basegold.io/">
     <meta property="og:title" content="BaseGold (BG) — The Store of Value for MineSwap.org">
-    <meta property="og:description" content="Deflationary digital asset with only 10,000 tokens — 2,100x scarcer than Bitcoin. Six burn mechanisms, MineSwap DEX, NFT mine plots, and 7-level referrals on Base Network.">
+    <meta property="og:description" content="Deflationary digital asset with only 10,000 tokens — 2,100x scarcer than Bitcoin. Five burn mechanisms, MineSwap DEX, NFT mine plots, and 7-level referrals on Base Network.">
     <meta property="og:image" content="https://basegold.io/og-image.png">
     
     <!-- Twitter -->
@@ -25,7 +48,7 @@
     <meta name="twitter:site" content="@BaseGold_BG">
     <meta name="twitter:url" content="https://basegold.io/">
     <meta name="twitter:title" content="BaseGold (BG) — The Store of Value for MineSwap.org">
-    <meta name="twitter:description" content="Deflationary digital asset with only 10,000 tokens — 2,100x scarcer than Bitcoin. Six burn mechanisms, MineSwap DEX, NFT mine plots, and 7-level referrals on Base Network.">
+    <meta name="twitter:description" content="Deflationary digital asset with only 10,000 tokens — 2,100x scarcer than Bitcoin. Five burn mechanisms, MineSwap DEX, NFT mine plots, and 7-level referrals on Base Network.">
     <meta name="twitter:image" content="https://basegold.io/og-image.png">
     
     <!-- Favicon -->
@@ -227,85 +250,42 @@
             opacity: 0.7;
         }
 
-        /* MEGA GOLD MINE BUTTON */
+        /* GOLD MINE CTA — layout only; visual treatment comes from .gold-metallic */
         .enter-mine-btn {
             display: inline-flex;
             align-items: center;
-            gap: 0.75rem;
-            background: linear-gradient(135deg, #FFD700, #FFA500, #FFD700);
-            background-size: 200% 200%;
-            color: #000;
-            padding: 1.2rem 3rem;
-            border: 3px solid #FFD700;
+            gap: 0.6rem;
+            padding: 0.85rem 2rem;
             border-radius: 50px;
             font-family: 'Cinzel', serif;
             font-weight: 700;
-            font-size: 1.4rem;
-            letter-spacing: 0.1em;
+            font-size: 1.05rem;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
-            cursor: pointer;
             text-decoration: none;
-            animation: goldPulse 2s ease-in-out infinite, goldShine 3s linear infinite;
-            box-shadow: 
-                0 0 20px rgba(255, 215, 0, 0.5),
-                0 0 40px rgba(255, 215, 0, 0.3),
-                0 0 60px rgba(255, 215, 0, 0.2),
-                inset 0 2px 10px rgba(255, 255, 255, 0.3);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
         }
 
-        .enter-mine-btn::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                45deg,
-                transparent 30%,
-                rgba(255, 255, 255, 0.4) 50%,
-                transparent 70%
-            );
-            animation: shine 3s infinite;
+        .enter-mine-btn.gold-metallic {
+            transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
         }
 
         .enter-mine-btn:hover {
-            transform: scale(1.08) translateY(-4px);
-            box-shadow: 
-                0 0 30px rgba(255, 215, 0, 0.7),
-                0 0 60px rgba(255, 215, 0, 0.5),
-                0 0 90px rgba(255, 215, 0, 0.3),
-                inset 0 2px 15px rgba(255, 255, 255, 0.4);
-            text-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
         }
 
         .enter-mine-btn .pickaxe {
-            font-size: 1.6rem;
-            animation: swing 1s ease-in-out infinite;
-        }
-
-        @keyframes goldPulse {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5), 0 0 40px rgba(255, 215, 0, 0.3); }
-            50% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.7), 0 0 60px rgba(255, 215, 0, 0.5); }
-        }
-
-        @keyframes goldShine {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes shine {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
+            display: inline-flex;
+            animation: swing 1.6s ease-in-out infinite;
         }
 
         @keyframes swing {
-            0%, 100% { transform: rotate(-10deg); }
-            50% { transform: rotate(10deg); }
+            0%, 100% { transform: rotate(-8deg); }
+            50% { transform: rotate(8deg); }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .enter-mine-btn .pickaxe { animation: none; }
+            .enter-mine-btn:hover { transform: none; }
         }
 
         .mine-btn-container {
@@ -325,11 +305,8 @@
 
         @media (max-width: 768px) {
             .enter-mine-btn {
-                padding: 1rem 2rem;
-                font-size: 1.1rem;
-            }
-            .enter-mine-btn .pickaxe {
-                font-size: 1.3rem;
+                padding: 0.75rem 1.5rem;
+                font-size: 0.95rem;
             }
         }
 
@@ -2069,6 +2046,42 @@
                 padding-top: 1rem;
             }
         }
+
+        /* === BaseGold canonical metallic gold button (ported from mineswap.app) === */
+        .gold-metallic {
+          position: relative;
+          background: linear-gradient(135deg, #8B6914 0%, #B8860B 14%, #D4AF37 30%, #F4D03F 46%, #FFEAA0 50%, #F4D03F 54%, #D4AF37 70%, #B8860B 86%, #8B6914 100%);
+          color: #1a1200;
+          border: 1px solid rgba(101, 67, 0, 0.55);
+          box-shadow: inset 0 1px 0 rgba(255,248,220,0.6), inset 0 -1px 2px rgba(101,67,0,0.4), 0 2px 5px rgba(0,0,0,0.32), 0 0 14px rgba(212,175,55,0.22);
+          text-shadow: 0 1px 0 rgba(255,245,200,0.35);
+          transition: filter 0.2s ease, box-shadow 0.2s ease;
+          overflow: hidden;
+          cursor: pointer;
+        }
+        .gold-metallic::before {
+          content: ''; position: absolute; top: 0; left: -75%; width: 50%; height: 100%;
+          background: linear-gradient(100deg, transparent 0%, rgba(255,255,240,0.55) 50%, transparent 100%);
+          transform: skewX(-20deg); transition: left 0.6s cubic-bezier(0.4,0,0.2,1); pointer-events: none;
+        }
+        .gold-metallic:hover:not(:disabled)::before { left: 125%; }
+        .gold-metallic:hover:not(:disabled) { filter: brightness(1.05); box-shadow: inset 0 1px 0 rgba(255,248,220,0.75), inset 0 -1px 2px rgba(101,67,0,0.45), 0 3px 7px rgba(0,0,0,0.4), 0 0 22px rgba(244,208,63,0.42); }
+        .gold-metallic:active:not(:disabled) { filter: brightness(0.92); box-shadow: inset 0 2px 4px rgba(101,67,0,0.55), inset 0 -1px 0 rgba(255,248,220,0.2), 0 1px 2px rgba(0,0,0,0.3); }
+        .gold-metallic:disabled, .gold-metallic[aria-disabled="true"] { filter: grayscale(0.5) brightness(0.82); cursor: not-allowed; }
+        @media (prefers-reduced-motion: reduce) { .gold-metallic::before { display: none; } }
+        .gold-gradient { background: linear-gradient(135deg, #8B6914 0%, #B8860B 14%, #D4AF37 30%, #F4D03F 46%, #FFEAA0 50%, #F4D03F 54%, #D4AF37 70%, #B8860B 86%, #8B6914 100%); }
+        .gold-text { background: linear-gradient(90deg, #D4AF37, #FDE047); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        /* === end canonical block === */
+
+        /* Preserve BaseGold's existing animated shimmer on .gold-text (overrides the non-animated canonical helper above) */
+        .gold-text {
+            background: linear-gradient(90deg, var(--gold-dark), var(--gold), var(--gold-light), var(--gold), var(--gold-dark));
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
     </style>
 </head>
 <body>
@@ -2092,7 +2105,7 @@
             <li><a href="#faq">FAQ</a></li>
             <li><a href="games.html" class="nav-highlight"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;margin-right:4px"><line x1="6" x2="10" y1="11" y2="11"/><line x1="8" x2="8" y1="9" y2="13"/><line x1="15" x2="15.01" y1="12" y2="12"/><line x1="18" x2="18.01" y1="10" y2="10"/><path d="M17.32 5H6.68a4 4 0 0 0-3.978 3.59c-.006.052-.01.101-.017.152C2.604 9.416 2 14.456 2 16a3 3 0 0 0 3 3c1 0 1.5-.5 2-1l1.414-1.414A2 2 0 0 1 9.828 16h4.344a2 2 0 0 1 1.414.586L17 18c.5.5 1 1 2 1a3 3 0 0 0 3-3c0-1.545-.604-6.584-.685-7.258-.007-.05-.011-.1-.017-.151A4 4 0 0 0 17.32 5z"/></svg>Games</a></li>
             <li><a href="https://mineswap.org" target="_blank" class="nav-highlight nav-primary"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;margin-right:4px"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>DEX Aggregator</a></li>
-            <li><a href="governance.html">Governance</a></li>
+            <li><a href="governance.html">Golden Council</a></li>
         </ul>
         <button class="hamburger" id="hamburger" onclick="toggleMenu()">
             <span></span>
@@ -2174,16 +2187,16 @@
 
             <!-- SUPER FUN ENTER MINE BUTTON -->
             <div class="mine-btn-container">
-                <a href="https://mineswap.app/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" class="enter-mine-btn">
-                    <span class="pickaxe"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="m14 12-8.5 8.5a2.12 2.12 0 1 1-3-3L11 9"/><path d="M15 13 9 7l4-4 6 6h3a8 8 0 0 1-7 7z"/></svg></span>
+                <a href="https://mineswap.app/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" class="enter-mine-btn gold-metallic">
+                    <span class="pickaxe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="m14 12-8.5 8.5a2.12 2.12 0 1 1-3-3L11 9"/><path d="M15 13 9 7l4-4 6 6h3a8 8 0 0 1-7 7z"/></svg></span>
                     Enter Your Gold Mine
-                    <span class="pickaxe"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="m14 12-8.5 8.5a2.12 2.12 0 1 1-3-3L11 9"/><path d="M15 13 9 7l4-4 6 6h3a8 8 0 0 1-7 7z"/></svg></span>
+                    <span class="pickaxe"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="m14 12-8.5 8.5a2.12 2.12 0 1 1-3-3L11 9"/><path d="M15 13 9 7l4-4 6 6h3a8 8 0 0 1-7 7z"/></svg></span>
                 </a>
                 <span class="mine-btn-subtitle"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> Season 3 Active • Win 10+ BG! <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg></span>
             </div>
 
             <div class="hero-buttons">
-                <a href="https://mineswap.org" target="_blank" class="buy-btn">Buy on MineSwap</a>
+                <a href="https://mineswap.org" target="_blank" class="buy-btn gold-metallic">Buy on MineSwap</a>
                 <a href="https://basegold.io/whitepaper.pdf" target="_blank" class="secondary-btn">Whitepaper</a>
                 <a href="#contract" class="secondary-btn">View Contract</a>
             </div>
@@ -2225,7 +2238,7 @@
     <section class="scarcity" id="scarcity">
         <div class="section-header">
             <h2 class="gold-text">Extreme Scarcity</h2>
-            <p>With only 10,000 tokens ever created and six burn mechanisms removing them permanently, BaseGold is engineered for increasing scarcity.</p>
+            <p>With only 10,000 tokens ever created and five burn mechanisms removing them permanently, BaseGold is engineered for increasing scarcity.</p>
         </div>
 
         <div class="comparison-table">
@@ -2328,8 +2341,8 @@
         <div class="features-grid">
             <a href="https://mineswap.org/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="feature-card">
                 <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg></div>
-                <h3>Six Burn Mechanisms</h3>
-                <p>Deflationary pressure from every angle — voluntary burns, MineSwap buyback-and-burn, mine plot purchases, shop purchases, Gold Vein referral burns, and Golden Council protocol burns.</p>
+                <h3>Five Burn Mechanisms</h3>
+                <p>Deflationary pressure from every angle — voluntary burns, MineSwap buyback-and-burn, mine plot purchases, shop purchases, and Gold Vein referral burns.</p>
             </a>
             <a href="https://mineswap.org/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="feature-card">
                 <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="m14 12-8.5 8.5a2.12 2.12 0 1 1-3-3L11 9"/><path d="M15 13 9 7l4-4 6 6h3a8 8 0 0 1-7 7z"/></svg></div>
@@ -2349,7 +2362,7 @@
             <a href="https://mineswap.org/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="feature-card">
                 <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5.21 16.5h13.58"/></svg></div>
                 <h3>Golden Council</h3>
-                <p>Hold just 1 BG to join the Golden Council — BaseGold's governance body. Vote on MineSwap fee ratios, burn scheduling, treasury disbursements, and protocol direction.</p>
+                <p>Hold just 1 BG to join the Golden Council — BaseGold's holder-recognition tier. Members get priority for seasonal ecosystem drops, early access to new features [CONFIRM-WITH-JUSTIN], and holder-only community channels [CONFIRM-WITH-JUSTIN]. The Council is a benefits tier — it does not control protocol parameters, fees, or treasury.</p>
             </a>
             <a href="https://mineswap.org/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" target="_blank" class="feature-card">
                 <div class="feature-icon"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
@@ -2482,7 +2495,7 @@
                 </div>
                 <div class="roadmap-content">
                     <h4>Growth</h4>
-                    <p>MineSwap DEX deployment with buyback-and-burn engine. Trader cashback rebate system. The Mine application with NFT mine plot minting. OpenSea marketplace integration. Buyback-and-burn shop. Golden Council governance activation. CoinGecko listing. Centralized exchange listing.</p>
+                    <p>MineSwap DEX deployment with buyback-and-burn engine. Trader cashback rebate system. The Mine application with NFT mine plot minting. OpenSea marketplace integration. Buyback-and-burn shop. Golden Council holder benefits tier rollout — holder recognition and priority for seasonal ecosystem drops. CoinGecko listing. Centralized exchange listing.</p>
                 </div>
             </div>
 
@@ -2492,7 +2505,7 @@
                 </div>
                 <div class="roadmap-content">
                     <h4>DeFi Integration</h4>
-                    <p>Aave lending integration. Airdrop distribution system tied to mine plot metadata. Staking platform with tiered reward periods. Cross-chain expansion evaluation.</p>
+                    <p>Leverage Strategies directory — an educational strategy directory routing through audited Base money markets. Airdrop distribution system tied to mine plot metadata. Staking platform with tiered reward periods. Cross-chain expansion evaluation.</p>
                 </div>
             </div>
 
@@ -2557,7 +2570,7 @@
                     </div>
                 </div>
                 <ul class="app-features">
-                    <li><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> 1st place wins <strong>2.0 BG + Golden Council seat</strong></li>
+                    <li><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg> 1st place wins <strong>2.0 BG + Golden Council membership</strong></li>
                     <li><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><circle cx="13.5" cy="6.5" r=".5" fill="#D4AF37"/><circle cx="17.5" cy="10.5" r=".5" fill="#D4AF37"/><circle cx="8.5" cy="7.5" r=".5" fill="#D4AF37"/><circle cx="6.5" cy="12.5" r=".5" fill="#D4AF37"/><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"/></svg> Mint your personal ERC-721 NFT mine plot</li>
                     <li><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block;vertical-align:-2px;"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg> Shop purchases = 100% burned</li>
                 </ul>
@@ -2621,7 +2634,7 @@
         <div class="team-cta-content">
             <h2 class="gold-text">The Golden Council</h2>
             <p>Meet the team behind BaseGold</p>
-            <a href="team.html" class="meet-team-btn">Meet the Team →</a>
+            <a href="team.html" class="meet-team-btn gold-metallic">Meet the Team →</a>
         </div>
     </section>
 
@@ -2677,7 +2690,7 @@
                 </div>
                 <div class="wp-item wp-featured">
                     <h3><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style=""><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg> Inverse Bitcoin Model</h3>
-                    <p>Bitcoin <em>mines</em> new tokens into circulation. BaseGold does the <em>opposite</em> — we <strong>burn</strong> tokens out of existence. Six deflationary burn mechanisms operate across every layer of the protocol, from voluntary holder burns to autonomous MineSwap buyback-and-burn cycles.</p>
+                    <p>Bitcoin <em>mines</em> new tokens into circulation. BaseGold does the <em>opposite</em> — we <strong>burn</strong> tokens out of existence. Five deflationary burn mechanisms operate across every layer of the protocol, from voluntary holder burns to autonomous MineSwap buyback-and-burn cycles.</p>
                 </div>
                 <div class="wp-item">
                     <h3>MineSwap DEX</h3>
@@ -2696,7 +2709,7 @@
                     <p>Liquidity pairs provisioned against ETH, BTC, LTC, and XRP — anchoring BaseGold to the strongest store-of-value assets. Future tokenized RWA pairs planned.</p>
                 </div>
             </div>
-            <a href="https://basegold.io/whitepaper.pdf" target="_blank" class="buy-btn" style="margin-top: 2rem;">Download Whitepaper v2.0 (PDF)</a>
+            <a href="https://basegold.io/whitepaper.pdf" target="_blank" class="buy-btn gold-metallic" style="margin-top: 2rem;">Download Whitepaper v2.1 (PDF)</a>
         </div>
     </section>
 
@@ -2757,7 +2770,7 @@
                     <span class="faq-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>BaseGold is the inverse of Bitcoin. While Bitcoin mines new tokens into circulation toward a 21 million cap, BaseGold burns tokens out of existence from a 10,000 supply. We're 2,100x scarcer than Bitcoin, with ~1 second transaction speeds (vs 15-30 minutes), near-zero fees (vs ~$5), and six burn mechanisms driving continuous deflation.</p>
+                    <p>BaseGold is the inverse of Bitcoin. While Bitcoin mines new tokens into circulation toward a 21 million cap, BaseGold burns tokens out of existence from a 10,000 supply. We're 2,100x scarcer than Bitcoin, with ~1 second transaction speeds (vs 15-30 minutes), near-zero fees (vs ~$5), and five burn mechanisms driving continuous deflation.</p>
                 </div>
             </div>
             <div class="faq-item">
@@ -2775,7 +2788,7 @@
                     <span class="faq-toggle">+</span>
                 </div>
                 <div class="faq-answer">
-                    <p>BaseGold operates six distinct burn mechanisms: voluntary holder burns, MineSwap DEX autonomous buyback-and-burn, mine plot purchases (0.10 BG per plot), in-game shop purchases (100% burned), Gold Vein referral burns (5% per activation), and Golden Council protocol burns. Together, these create constant deflationary pressure from every layer of the ecosystem.</p>
+                    <p>BaseGold operates five distinct burn mechanisms: voluntary holder burns, MineSwap DEX autonomous buyback-and-burn, mine plot purchases (0.10 BG per plot), in-game shop purchases (100% burned), and Gold Vein referral burns (5% per activation). Together, these create constant deflationary pressure from every layer of the ecosystem.</p>
                 </div>
             </div>
             <div class="faq-item">
@@ -3049,11 +3062,42 @@
         });
 
         // ========== LIVE PRICE TICKER ==========
+        // Graceful fallback: if the DexScreener feed fails before any data has
+        // loaded, replace the raw "$--" placeholders with an em dash and an
+        // explanatory tooltip so the hero doesn't read as a dead site. Once a
+        // fetch has succeeded, later failures keep the last-good values on screen.
+        let priceDataLoaded = false;
+
+        function showPriceDataUnavailable() {
+            if (priceDataLoaded) return; // keep last-good values on screen
+            const unavailableTitle = 'Live data temporarily unavailable';
+            ['ticker-price', 'ticker-volume', 'ticker-mcap', 'ticker-txns', 'community-txns'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    el.textContent = '—';
+                    el.title = unavailableTitle;
+                }
+            });
+            const changeEl = document.getElementById('ticker-change');
+            if (changeEl) {
+                changeEl.textContent = '—';
+                changeEl.className = 'ticker-change';
+                changeEl.title = unavailableTitle;
+            }
+        }
+
+        function clearPriceDataUnavailable() {
+            ['ticker-price', 'ticker-change', 'ticker-volume', 'ticker-mcap', 'ticker-txns', 'community-txns'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.removeAttribute('title');
+            });
+        }
+
         async function fetchPriceData() {
             try {
                 const response = await fetch('https://api.dexscreener.com/latest/dex/tokens/0x36b712A629095234F2196BbB000D1b96C12Ce78e');
                 const data = await response.json();
-                
+
                 if (data.pairs && data.pairs.length > 0) {
                     // Get the main pair (highest liquidity on Base)
                     const basePairs = data.pairs.filter(p => p.chainId === 'base');
@@ -3095,10 +3139,18 @@
                         if (communityTxns) {
                             communityTxns.textContent = totalTxns.toLocaleString();
                         }
+
+                        priceDataLoaded = true;
+                        clearPriceDataUnavailable();
+                    } else {
+                        showPriceDataUnavailable(); // no Base pair in response
                     }
+                } else {
+                    showPriceDataUnavailable(); // empty/missing pairs array
                 }
             } catch (error) {
                 console.error('Error fetching price data:', error);
+                showPriceDataUnavailable(); // network/CSP/API failure
             }
         }
 
