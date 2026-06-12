@@ -1,8 +1,0 @@
-# BaseGold.io — robots.txt
-# Allow all reputable crawlers full access to public content.
-
-User-agent: *
-Allow: /
-
-# XML Sitemap for search engine discovery
-Sitemap: https://basegold.io/sitemap.xml

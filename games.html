@@ -829,6 +829,31 @@
             .nav-links { gap: 1rem; }
             .nav-link { font-size: 0.8rem; }
         }
+
+        /* === BaseGold canonical metallic gold button (ported from mineswap.app) === */
+        .gold-metallic {
+          position: relative;
+          background: linear-gradient(135deg, #8B6914 0%, #B8860B 14%, #D4AF37 30%, #F4D03F 46%, #FFEAA0 50%, #F4D03F 54%, #D4AF37 70%, #B8860B 86%, #8B6914 100%);
+          color: #1a1200;
+          border: 1px solid rgba(101, 67, 0, 0.55);
+          box-shadow: inset 0 1px 0 rgba(255,248,220,0.6), inset 0 -1px 2px rgba(101,67,0,0.4), 0 2px 5px rgba(0,0,0,0.32), 0 0 14px rgba(212,175,55,0.22);
+          text-shadow: 0 1px 0 rgba(255,245,200,0.35);
+          transition: filter 0.2s ease, box-shadow 0.2s ease;
+          overflow: hidden;
+          cursor: pointer;
+        }
+        .gold-metallic::before {
+          content: ''; position: absolute; top: 0; left: -75%; width: 50%; height: 100%;
+          background: linear-gradient(100deg, transparent 0%, rgba(255,255,240,0.55) 50%, transparent 100%);
+          transform: skewX(-20deg); transition: left 0.6s cubic-bezier(0.4,0,0.2,1); pointer-events: none;
+        }
+        .gold-metallic:hover:not(:disabled)::before { left: 125%; }
+        .gold-metallic:hover:not(:disabled) { filter: brightness(1.05); box-shadow: inset 0 1px 0 rgba(255,248,220,0.75), inset 0 -1px 2px rgba(101,67,0,0.45), 0 3px 7px rgba(0,0,0,0.4), 0 0 22px rgba(244,208,63,0.42); }
+        .gold-metallic:active:not(:disabled) { filter: brightness(0.92); box-shadow: inset 0 2px 4px rgba(101,67,0,0.55), inset 0 -1px 0 rgba(255,248,220,0.2), 0 1px 2px rgba(0,0,0,0.3); }
+        .gold-metallic:disabled, .gold-metallic[aria-disabled="true"] { filter: grayscale(0.5) brightness(0.82); cursor: not-allowed; }
+        @media (prefers-reduced-motion: reduce) { .gold-metallic::before { display: none; } }
+        .gold-gradient { background: linear-gradient(135deg, #8B6914 0%, #B8860B 14%, #D4AF37 30%, #F4D03F 46%, #FFEAA0 50%, #F4D03F 54%, #D4AF37 70%, #B8860B 86%, #8B6914 100%); }
+        .gold-text { background: linear-gradient(90deg, #D4AF37, #FDE047); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
     </style>
 </head>
 <body>
@@ -847,7 +872,6 @@
             <a href="buy.html" class="nav-link">DEX Finder</a>
             <a href="governance.html" class="nav-link">Governance</a>
             <a href="team.html" class="nav-link">Team</a>
-            <a href="blog/" class="nav-link">Blog</a>
         </nav>
     </header>
 
@@ -880,8 +904,8 @@
         
         <!-- Enter The Mine CTA Button -->
         <a href="https://mineswap.app/?ref=0x4C854b3dc7ccCaDE2EbBceEd771f4dEEeCb60d39" 
-           target="_blank" 
-           class="enter-mine-btn">
+           target="_blank"
+           class="enter-mine-btn gold-metallic">
             ⛏️ Enter The Mine
         </a>
     </section>
@@ -1117,7 +1141,7 @@
                 </div>
             </div>
 
-            <a href="https://opensea.io/collection/basegold-mine-929632222" class="nft-cta" target="_blank">
+            <a href="https://opensea.io/collection/basegold-mine-929632222" class="nft-cta gold-metallic" target="_blank">
                 🌊 Browse Mines on OpenSea
             </a>
         </div>
@@ -1154,9 +1178,9 @@
                     Powers The Mine shop purchases. Accepts ETH, buys BG from DEX, burns 100% instantly.
                 </p>
                 <div class="contract-address">
-                    0x9f02B8cBc3dDA6F7F9C704f898d063677D6C7D9d
+                    0x76306f6e636354b1B9CfF3B66DD0f3339008c4f4
                 </div>
-                <a href="https://basescan.org/address/0x9f02B8cBc3dDA6F7F9C704f898d063677D6C7D9d" class="contract-link" target="_blank">
+                <a href="https://basescan.org/address/0x76306f6e636354b1B9CfF3B66DD0f3339008c4f4" class="contract-link" target="_blank">
                     View on BaseScan →
                 </a>
             </div>
@@ -1170,9 +1194,9 @@
                     7-level referral system. 95% distributed to users, 5% burned permanently.
                 </p>
                 <div class="contract-address">
-                    0x47C1a63a07F45AFd3724A417ec2934A9EF1500dF
+                    0xEfd81a6EaBeeC9722Ed07aF2A6aa2c7168A68a94
                 </div>
-                <a href="https://basescan.org/address/0x47C1a63a07F45AFd3724A417ec2934A9EF1500dF" class="contract-link" target="_blank">
+                <a href="https://basescan.org/address/0xEfd81a6EaBeeC9722Ed07aF2A6aa2c7168A68a94" class="contract-link" target="_blank">
                     View on BaseScan →
                 </a>
             </div>

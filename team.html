@@ -548,6 +548,30 @@
                 grid-template-columns: repeat(2, 1fr);
             }
         }
+
+        /* === BaseGold canonical metallic gold button (ported from mineswap.app) === */
+        .gold-metallic {
+          position: relative;
+          background: linear-gradient(135deg, #8B6914 0%, #B8860B 14%, #D4AF37 30%, #F4D03F 46%, #FFEAA0 50%, #F4D03F 54%, #D4AF37 70%, #B8860B 86%, #8B6914 100%);
+          color: #1a1200;
+          border: 1px solid rgba(101, 67, 0, 0.55);
+          box-shadow: inset 0 1px 0 rgba(255,248,220,0.6), inset 0 -1px 2px rgba(101,67,0,0.4), 0 2px 5px rgba(0,0,0,0.32), 0 0 14px rgba(212,175,55,0.22);
+          text-shadow: 0 1px 0 rgba(255,245,200,0.35);
+          transition: filter 0.2s ease, box-shadow 0.2s ease;
+          overflow: hidden;
+          cursor: pointer;
+        }
+        .gold-metallic::before {
+          content: ''; position: absolute; top: 0; left: -75%; width: 50%; height: 100%;
+          background: linear-gradient(100deg, transparent 0%, rgba(255,255,240,0.55) 50%, transparent 100%);
+          transform: skewX(-20deg); transition: left 0.6s cubic-bezier(0.4,0,0.2,1); pointer-events: none;
+        }
+        .gold-metallic:hover:not(:disabled)::before { left: 125%; }
+        .gold-metallic:hover:not(:disabled) { filter: brightness(1.05); box-shadow: inset 0 1px 0 rgba(255,248,220,0.75), inset 0 -1px 2px rgba(101,67,0,0.45), 0 3px 7px rgba(0,0,0,0.4), 0 0 22px rgba(244,208,63,0.42); }
+        .gold-metallic:active:not(:disabled) { filter: brightness(0.92); box-shadow: inset 0 2px 4px rgba(101,67,0,0.55), inset 0 -1px 0 rgba(255,248,220,0.2), 0 1px 2px rgba(0,0,0,0.3); }
+        .gold-metallic:disabled, .gold-metallic[aria-disabled="true"] { filter: grayscale(0.5) brightness(0.82); cursor: not-allowed; }
+        @media (prefers-reduced-motion: reduce) { .gold-metallic::before { display: none; } }
+        .gold-gradient { background: linear-gradient(135deg, #8B6914 0%, #B8860B 14%, #D4AF37 30%, #F4D03F 46%, #FFEAA0 50%, #F4D03F 54%, #D4AF37 70%, #B8860B 86%, #8B6914 100%); }
     </style>
 </head>
 <body>
@@ -1031,8 +1055,7 @@
         <div class="team-cta">
             <p>Want to join the Golden Council?</p>
             <div class="cta-buttons">
-                <a href="https://t.me/+CD3uVgD0EJZhODhh" target="_blank" class="join-btn">Join Our Telegram</a>
-                <a href="blog/" class="home-btn">📖 Read the Blog</a>
+                <a href="https://t.me/+CD3uVgD0EJZhODhh" target="_blank" class="join-btn gold-metallic">Join Our Telegram</a>
                 <a href="index.html" class="home-btn">← Back to Home</a>
             </div>
         </div>
