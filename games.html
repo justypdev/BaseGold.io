@@ -216,34 +216,28 @@
             letter-spacing: 0.1em;
         }
 
-        /* Enter The Mine CTA Button */
+        /* Enter The Mine CTA Button — layout only; visual treatment comes from .gold-metallic */
         .enter-mine-btn {
             display: inline-block;
             margin-top: 2rem;
-            padding: 1rem 3rem;
-            font-size: 1.3rem;
+            padding: 0.85rem 2rem;
+            font-size: 1.05rem;
             font-weight: bold;
             font-family: 'Cinzel', serif;
-            color: #000;
-            background: linear-gradient(135deg, #D4AF37, #FDE047, #D4AF37);
-            background-size: 200% 200%;
-            border: none;
             border-radius: 12px;
             text-decoration: none;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.4);
-            animation: goldShimmer 3s ease-in-out infinite;
+        }
+
+        .enter-mine-btn.gold-metallic {
+            transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
         }
 
         .enter-mine-btn:hover {
-            transform: scale(1.05) translateY(-2px);
-            box-shadow: 0 8px 30px rgba(212, 175, 55, 0.6);
+            transform: translateY(-2px);
         }
 
-        @keyframes goldShimmer {
-            0%, 100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+        @media (prefers-reduced-motion: reduce) {
+            .enter-mine-btn:hover { transform: none; }
         }
 
         /* Protocol Features */
